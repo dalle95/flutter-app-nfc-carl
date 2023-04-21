@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
-import '../providers/actor.dart';
-import '../models/http_exception.dart';
+import '../models/actor.dart';
+import '../error_handling/http_exception.dart';
 
 class Auth with ChangeNotifier {
   String? _urlAmbiente;

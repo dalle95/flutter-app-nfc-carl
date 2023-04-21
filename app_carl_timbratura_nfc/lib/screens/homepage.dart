@@ -1,11 +1,11 @@
-import 'package:app_carl_timbratura_nfc/providers/box.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 
+import '../models/box.dart';
 import '../providers/timbratura.dart';
-import '../providers/actor.dart';
+import '../models/actor.dart';
 import '../providers/auth.dart';
 
 import '../widgets/bt_flat_button.dart';

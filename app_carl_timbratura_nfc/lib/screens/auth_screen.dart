@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/http_exception.dart';
+import '../error_handling/http_exception.dart';
 import '../providers/auth.dart';
 
 import '../widgets/loading_indicator.dart';

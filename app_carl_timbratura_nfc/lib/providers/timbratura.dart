@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:app_carl_timbratura_nfc/models/http_exception.dart';
 import 'package:http/http.dart' as http;
 
-import '/providers/actor.dart';
-import '/providers/box.dart';
+import '../error_handling/http_exception.dart';
+
+import '../models/actor.dart';
+import '../models/box.dart';
 
 class Timbratura {
   // Funzione per estrarre il codice per la timbratura

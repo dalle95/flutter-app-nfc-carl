@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../label.dart';
+
 import '../providers/auth.dart';
-import '../widgets/bt_flat_button.dart';
+
+import '../screens/timbrature_list_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   Widget buildListTile(
@@ -37,23 +40,27 @@ class MainDrawer extends StatelessWidget {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Disconnettersi dall\'applicazione?'),
+          title: Text(labels.logout),
+          content: Text(labels.disconnessioneMessaggio),
           actions: [
-            FlatButton(
-              () {
+            TextButton(
+              onPressed: () {
                 Navigator.of(ctx).pop();
                 Provider.of<Auth>(context, listen: false).logoout();
               },
-              const Text('Conferma'),
-              Theme.of(ctx).colorScheme.background,
+              child: Text(labels.conferma),
+              style: TextButton.styleFrom(
+                backgroundColor: Theme.of(ctx).colorScheme.background,
+              ),
             ),
-            FlatButton(
-              () {
+            TextButton(
+              onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              const Text('Annulla'),
-              Theme.of(ctx).colorScheme.background,
+              child: Text(labels.annulla),
+              style: TextButton.styleFrom(
+                backgroundColor: Theme.of(ctx).colorScheme.background,
+              ),
             ),
           ],
         ),
@@ -73,9 +80,9 @@ class MainDrawer extends StatelessWidget {
             width: double.infinity,
             height: 120,
             child: Text(
-              'Timbratore',
+              labels.titoloApp,
               style: TextStyle(
-                color: Theme.of(context).backgroundColor,
+                color: Theme.of(context).appBarTheme.foregroundColor,
                 fontSize: 30,
                 fontWeight: FontWeight.w900,
               ),
@@ -87,7 +94,21 @@ class MainDrawer extends StatelessWidget {
           buildListTile(
             () {},
             Icons.account_circle_rounded,
-            'Utente: $actorName',
+            '${labels.utente_duepunti} $actorName',
+            Theme.of(context).colorScheme.secondary,
+            Colors.black,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          buildListTile(
+            () {
+              Navigator.of(context).pushNamed(
+                TimbraturaListScreen.routeName,
+              );
+            },
+            Icons.share_arrival_time_outlined,
+            labels.elencoTimbrature,
             Theme.of(context).colorScheme.secondary,
             Colors.black,
           ),
@@ -97,7 +118,7 @@ class MainDrawer extends StatelessWidget {
           buildListTile(
             () {},
             Icons.info,
-            'Informazioni App',
+            labels.infoApp,
             Theme.of(context).colorScheme.secondary,
             Colors.black,
           ),
@@ -107,7 +128,7 @@ class MainDrawer extends StatelessWidget {
           buildListTile(
             _logout,
             Icons.logout,
-            'Logout',
+            labels.logout,
             Theme.of(context).colorScheme.secondary,
             Colors.black,
           )

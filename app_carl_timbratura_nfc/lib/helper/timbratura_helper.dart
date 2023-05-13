@@ -1,20 +1,22 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 import '../error_handling/http_exception.dart';
 
 import '../models/actor.dart';
 import '../models/box.dart';
 
-class Timbratura {
+class TimbraturaHelper {
   // Funzione per estrarre il codice per la timbratura
   static Future<String> estraiCodiceTimbratura(
     String authToken,
     String urlAmbiente,
     Actor user,
   ) async {
-    print('Funzione estraiCodiceTimbratura');
+    var logger = Logger();
+    logger.d('Funzione estraiCodiceTimbratura');
     // Definizione Headers per le chiamate a Carl
     Map<String, String> headers = {
       "X-CS-Access-Token": authToken,
@@ -27,7 +29,7 @@ class Timbratura {
     http.Response response;
 
     // Definizione variabili per gestione codice
-    int numero = 0;
+    int numero = 1;
     String codice;
     String numeroStringa;
 
@@ -44,7 +46,7 @@ class Timbratura {
         headers: headers,
       );
 
-      print(
+      logger.d(
           'Stato estrazione codice: ${json.decode(response.statusCode.toString())}');
 
       // Controllo lo stato della chiamata per sapere se è andata a buon fine
@@ -55,9 +57,7 @@ class Timbratura {
       } else {
         // Estrazione dati
         extractedData = json.decode(response.body) as Map<String, dynamic>;
-        for (var wo in extractedData['data']) {
-          numero++;
-        }
+        numero = extractedData['data'].length + 1;
       }
       // Converto il numero in stringa
       numeroStringa = '0000$numero';
@@ -78,7 +78,8 @@ class Timbratura {
     String urlAmbiente,
     String nfcId,
   ) async {
-    print('Funzione estraiBoxTimbratura');
+    var logger = Logger();
+    logger.d('Funzione estraiBoxTimbratura');
     // Definizione Headers per le chiamate a Carl
     Map<String, String> headers = {
       "X-CS-Access-Token": authToken,
@@ -116,7 +117,7 @@ class Timbratura {
       // Estrazione dati
       extractedData = json.decode(response.body) as Map<String, dynamic>;
 
-      print(extractedData);
+      logger.d(extractedData);
 
       // Se i dati sono nulli restituisco l'errore
       if (extractedData['data'].toString() == '[]') {
@@ -138,78 +139,5 @@ class Timbratura {
     );
 
     return box;
-  }
-
-  // Funzione per registrare la timbratura
-  static Future<void> registraTimbratura(
-    String authToken,
-    String urlAmbiente,
-    Actor user,
-    String codice,
-    Box box,
-  ) async {
-    print('Funzione registraTimbratura');
-    // Definizione Headers per le chiamate a Carl
-    Map<String, String> headers = {
-      "X-CS-Access-Token": authToken,
-      "Content-Type": "application/vnd.api+json",
-    };
-
-    // Definizione variabili necessarie per gestire le chiamate http
-    Uri url;
-    Map<String, dynamic> extractedData;
-    http.Response response;
-
-    // Definizioni dati timbratura
-    String code = codice;
-    String description = user.nome;
-    DateTime now = DateTime.now();
-
-    // Funzione per creare il record della timbratura
-
-    // Definizione URL per registrazione timbratura
-    url = Uri.parse('$urlAmbiente/api/entities/v1/road');
-
-    // Definizione dati per registrazione timbratura su Carl
-    final dataTimbratura = json.encode(
-      {
-        'data': {
-          "type": "road",
-          "attributes": {
-            "code": code,
-            "description": description,
-            "xtraTxt01": box.description,
-            "xtraTxt02": now.toIso8601String(),
-          },
-          // "relationships": {
-          //   "structure": {
-          //     "data": {"type": "structure", "id": "LOCATION"}
-          //   }
-          // }
-        },
-      },
-    );
-
-    // Creazione chiamata POST per creare la timbratura
-    try {
-      response = await http.post(
-        url,
-        body: dataTimbratura,
-        headers: headers,
-      );
-
-      print('Stato timbratura: ${json.decode(response.statusCode.toString())}');
-      // Recupero l'ID del Box appena creato
-      //box.id = json.decode(response.body)['data']['id'];
-
-      // Controllo lo stato della chiamata per sapere se è andata a buon fine
-      if (response.statusCode >= 400) {
-        throw HttpException(
-          json.decode(response.body)['errors'][0]['title'].toString(),
-        );
-      }
-    } catch (error) {
-      throw error;
-    }
   }
 }

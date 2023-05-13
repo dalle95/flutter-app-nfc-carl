@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../label.dart';
+
 import '../error_handling/http_exception.dart';
 import '../providers/auth.dart';
 
 import '../widgets/loading_indicator.dart';
-import '../widgets/bt_raise_button.dart';
-import '../widgets/bt_flat_button.dart';
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
@@ -23,7 +23,7 @@ class AuthScreen extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   Theme.of(context).primaryColor,
-                  const Color.fromARGB(255, 11, 50, 113),
+                  Theme.of(context).primaryColorDark
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -72,19 +72,22 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  // Dialogo messaggio di errore
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Si è verificato un errore'),
+        title: Text(labels.erroreTitolo),
         content: Text(message),
         actions: [
-          FlatButton(
-            () {
+          TextButton(
+            onPressed: () {
               Navigator.of(context).pop();
             },
-            const Text('Conferma'),
-            Theme.of(context).backgroundColor,
+            child: Text(labels.conferma),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.background,
+            ),
           )
         ],
       ),
@@ -111,11 +114,10 @@ class _AuthCardState extends State<AuthCard> {
       );
     } on HttpException catch (error) {
       // Errore durante il log in
-      print(error.toString());
       _showErrorDialog(error.toString());
     } catch (error) {
-      var errorMessage =
-          'Non è possibile esesguire l\'autenticazione, prova più tardi.';
+      var errorMessage = labels.erroreAutenticazione;
+      throw errorMessage;
     }
 
     setState(() {
@@ -143,7 +145,7 @@ class _AuthCardState extends State<AuthCard> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    'Timbratore',
+                    labels.titoloApp,
                     style: TextStyle(
                       fontSize: 30,
                       color: Theme.of(context).colorScheme.secondary,
@@ -152,13 +154,14 @@ class _AuthCardState extends State<AuthCard> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: 'Login', contentPadding: EdgeInsets.zero),
+                    decoration: InputDecoration(
+                        labelText: labels.login,
+                        contentPadding: EdgeInsets.zero),
                     keyboardType: TextInputType.name,
                     textAlign: TextAlign.center,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Nome invalido!';
+                        return labels.erroreNomeNullo;
                       }
                       return null;
                     },
@@ -167,15 +170,15 @@ class _AuthCardState extends State<AuthCard> {
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    decoration: InputDecoration(
+                      labelText: labels.password,
                     ),
                     obscureText: true,
                     textAlign: TextAlign.center,
                     controller: _passwordController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'La password non può essere nulla!';
+                        return labels.errorePasswordNulla;
                       }
                       return null;
                     },
@@ -190,18 +193,22 @@ class _AuthCardState extends State<AuthCard> {
                     height: 20,
                   ),
                   if (_isLoading)
-                    LoadingIndicator('Caricamento')
+                    LoadingIndicator(labels.caricamento)
                   else
-                    RaiseButton(
-                      _submit,
-                      const Text(
-                        'Connessione',
+                    ElevatedButton(
+                      child: Text(
+                        labels.connessione,
                         style: TextStyle(
                           fontSize: 20,
                         ),
                       ),
-                      Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).colorScheme.background,
+                      onPressed: _submit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.background,
+                      ),
                     ),
                 ],
               ),

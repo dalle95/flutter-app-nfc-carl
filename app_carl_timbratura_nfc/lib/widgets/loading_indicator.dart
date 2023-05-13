@@ -11,7 +11,10 @@ class LoadingIndicator extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [CircularProgressIndicator(), Text(message)],
+        children: [
+          CircularProgressIndicator(),
+          Text(message),
+        ],
       ),
     );
   }

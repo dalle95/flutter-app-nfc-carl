@@ -12,7 +12,7 @@
    <uses-feature android:name="android.hardware.nfc" android:required="true" />
    
    <application
-        android:label="app_carl_timbratura_nfc"
+        android:label="Timbratore NFC"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

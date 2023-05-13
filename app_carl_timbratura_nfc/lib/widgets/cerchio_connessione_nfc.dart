@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CerchioConnessioneNFC extends StatelessWidget {
-  Function()? tapHandler;
-  String text;
-  Color accentColor;
+  final Function()? tapHandler;
+  final String text;
+  final Color accentColor;
 
   CerchioConnessioneNFC(
     this.tapHandler,

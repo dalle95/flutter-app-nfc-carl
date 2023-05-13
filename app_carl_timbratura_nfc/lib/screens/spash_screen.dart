@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../label.dart';
+
 import '../widgets/loading_indicator.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -7,7 +9,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: LoadingIndicator('In caricamento...'),
+        child: LoadingIndicator(labels.caricamento),
       ),
     );
   }

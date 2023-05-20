@@ -12,7 +12,9 @@ class LoadingIndicator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          CircularProgressIndicator(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
           Text(message),
         ],
       ),

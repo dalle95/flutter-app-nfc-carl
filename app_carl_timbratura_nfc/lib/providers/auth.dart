@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
@@ -82,7 +82,7 @@ class Auth with ChangeNotifier {
         response = await http.get(
           url,
           headers: {
-            "X-CS-Access-Token": _token.toString(),
+            "X-CS-Access-Token": _token!,
           },
         );
 
@@ -107,13 +107,16 @@ class Auth with ChangeNotifier {
         throw error;
       }
       notifyListeners();
+
+      // Inizializzo la funzione per l'auto logout
       _autoLogout();
 
       logger.d(
           'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, AmbienteUrl: $_urlAmbiente, Data scadenza: ${_expiryDate.toString()}');
 
-      // Preparo l'istanza SharePreferences per salvare i dati di autenticazione
-      final prefs = await SharedPreferences.getInstance();
+      // Preparo l'istanza FlutterSecureStorage per salvare i dati di autenticazione
+      final storage = const FlutterSecureStorage();
+
       final userData = json.encode(
         {
           'url': _urlAmbiente,
@@ -127,7 +130,9 @@ class Auth with ChangeNotifier {
 
       logger.d(userData);
 
-      prefs.setString('userDataTimbratore', userData);
+      // Salvo i dati di autenticazione
+      await storage.write(key: 'userData', value: userData);
+
       logger.d('Credenziali salvate');
     } catch (error) {
       throw error;
@@ -145,10 +150,10 @@ class Auth with ChangeNotifier {
   Future<bool> tryAutoLogin() async {
     logger.d('Funzione tryAutoLogin');
 
-    // Preparo l'istanza SharePreferences per recuperare i dati di autenticazione
-    final prefs = await SharedPreferences.getInstance();
+    // Preparo l'istanza FlutterSecureStorage per recuperare i dati di autenticazione
+    final storage = const FlutterSecureStorage();
 
-    if (!prefs.containsKey('userDataTimbratore')) {
+    if (!await storage.containsKey(key: 'userData')) {
       logger.d('Nessun dato sul dispositivo');
       return false;
     }
@@ -156,31 +161,30 @@ class Auth with ChangeNotifier {
     logger.d('Dati trovati');
 
     // Estrazione dei dati
-    final String? extractedUserData = prefs.getString('userDataTimbratore');
+    final extractedUserData =
+        json.decode(await storage.read(key: 'userData') ?? '')
+            as Map<String, dynamic>;
 
-    final extractedUserDataMap =
-        json.decode(extractedUserData!) as Map<String, dynamic>;
-
-    logger.d(extractedUserDataMap);
+    logger.d(extractedUserData);
 
     logger.d(
-      'Dati sul dispositivo: ${json.decode(prefs.getString('userDataTimbratore').toString())}',
+      'Dati sul dispositivo: ${json.decode(await storage.read(key: 'userData') ?? '')}',
     );
 
-    final expiryDate =
-        DateTime.parse(extractedUserDataMap['expiryDate'].toString());
+    final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
+
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
 
     // Definizione dati di autenticazione
-    _urlAmbiente = extractedUserDataMap['url'];
-    _token = extractedUserDataMap['token'];
+    _urlAmbiente = extractedUserData['url'];
+    _token = extractedUserData['token'];
 
     _user = Actor(
-      id: extractedUserDataMap['user_id'],
-      code: extractedUserDataMap['user_code'],
-      nome: extractedUserDataMap['user_nome'],
+      id: extractedUserData['user_id'],
+      code: extractedUserData['user_code'],
+      nome: extractedUserData['user_nome'],
     );
 
     _expiryDate = expiryDate;
@@ -208,8 +212,9 @@ class Auth with ChangeNotifier {
       _authTimer = null;
     }
 
-    // Aggiorno le sharedPreferences
-    final prefs = await SharedPreferences.getInstance();
+    // Preparo l'istanza FlutterSecureStorage per aggiornare i dati di autenticazione
+    final storage = const FlutterSecureStorage();
+
     final userData = json.encode(
       {
         'url': null,
@@ -220,7 +225,10 @@ class Auth with ChangeNotifier {
         'expiryDate': null,
       },
     );
-    prefs.setString('userDataTimbratore', userData);
+
+    // Aggiorno i dati di autenticazione
+    storage.write(key: 'userData', value: userData);
+
     notifyListeners();
   }
 
@@ -229,7 +237,9 @@ class Auth with ChangeNotifier {
     if (_authTimer != null) {
       _authTimer!.cancel();
     }
+    // Definisco il tempo di scadenza del token
     final timeToExpiry = _expiryDate!.difference(DateTime.now()).inSeconds;
+    // Inizializzo un timer per la disconnessione automatica
     _authTimer = Timer(Duration(seconds: timeToExpiry), logoout);
   }
 }

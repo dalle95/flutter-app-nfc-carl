@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../label.dart';
 
@@ -21,6 +22,51 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
+final theme = ThemeData(
+  brightness: Brightness.light,
+  primaryColor: Colors.blue,
+  primaryColorDark: const Color.fromARGB(255, 11, 50, 113),
+  secondaryHeaderColor: Colors.orange,
+  colorScheme: ColorScheme.fromSwatch().copyWith(
+    primary: Color.fromRGBO(255, 152, 0, 1),
+    onPrimary: Colors.orangeAccent,
+    secondary: Color.fromRGBO(82, 68, 56, 1),
+    onSecondary: Colors.black87,
+    background: Colors.white,
+    onBackground: Colors.black87,
+    error: Colors.redAccent,
+  ),
+  appBarTheme: const AppBarTheme(
+    foregroundColor: Colors.white,
+    backgroundColor: Colors.orangeAccent,
+  ),
+  buttonTheme: const ButtonThemeData(
+    buttonColor: Colors.orange,
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+    ),
+  ),
+  textTheme: const TextTheme(
+    displayLarge: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+    displayMedium: TextStyle(
+        fontSize: 20, color: Colors.orange, fontStyle: FontStyle.normal),
+    bodyLarge: TextStyle(
+      fontSize: 25.0,
+      color: Colors.black,
+      fontFamily: 'Hind',
+    ),
+    bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+  ),
+);
 
 class _MyAppState extends State<MyApp> {
   @override
@@ -46,36 +92,15 @@ class _MyAppState extends State<MyApp> {
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           title: labels.titoloApp,
-          theme: ThemeData(
-            brightness: Brightness.light,
-            primaryColor: Colors.blue,
-            primaryColorDark: const Color.fromARGB(255, 11, 50, 113),
-            secondaryHeaderColor: Colors.orange,
-            colorScheme: ColorScheme.fromSwatch().copyWith(
-              primary: Colors.blue,
-              onPrimary: Colors.blueAccent,
-              secondary: Colors.orange,
-              onSecondary: Colors.orangeAccent,
-              background: Colors.white,
-              error: Colors.redAccent,
-            ),
-            appBarTheme: const AppBarTheme(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
-            ),
-            buttonTheme: const ButtonThemeData(
-              buttonColor: Colors.orange,
-            ),
-            textTheme: const TextTheme(
-              displayLarge:
-                  TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-              displayMedium:
-                  TextStyle(fontSize: 25, fontStyle: FontStyle.normal),
-              bodyLarge: TextStyle(
-                  fontSize: 20.0, color: Colors.white, fontFamily: 'Hind'),
-              bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-            ),
-          ),
+          theme: theme,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('it'),
+          ],
           home: auth.isAuth
               ? MyHomePage()
               : FutureBuilder(

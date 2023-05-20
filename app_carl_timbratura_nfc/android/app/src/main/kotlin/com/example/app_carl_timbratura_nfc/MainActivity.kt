@@ -1,4 +1,4 @@
-package com.example.app_carl_timbratura_nfc
+package it.injenia.carl_timbratoreNCF
 
 import io.flutter.embedding.android.FlutterActivity
 

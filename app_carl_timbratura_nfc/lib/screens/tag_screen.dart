@@ -1,19 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-import 'package:provider/provider.dart';
 
 import '../label.dart';
 
-import '../models/box.dart';
-import '../models/actor.dart';
-import '../models/timbratura.dart';
-import '../providers/timbrature.dart';
-import '../providers/auth.dart';
-import '../helper/timbratura_helper.dart';
-
-import '../screens/result_screen.dart';
+import '../helpers/tag_helper.dart';
 
 import '../widgets/cerchio_connessione_nfc.dart';
 
@@ -26,17 +17,21 @@ class TagScreen extends StatefulWidget {
 
 class _TagScreenState extends State<TagScreen> {
   String message = labels.attivazioneTagNFC;
-  Color coloreCerchio = Colors.orange;
+  Color coloreCerchio = Colors.grey;
+  IconData icona = Icons.sensors_off;
 
   var logger = Logger();
 
   // Funzione lettura Tag NFC
   void _tagRead(String direzione) {
     // Modifico il CerchioConnessioneNFC per informare che l'app è pronta alla lettura del NFC
-    setState(() {
-      message = labels.letturaTagNFC;
-      coloreCerchio = Colors.green;
-    });
+    setState(
+      () {
+        message = labels.letturaTagNFC;
+        coloreCerchio = Theme.of(context).colorScheme.onPrimary;
+        icona = Icons.sensors;
+      },
+    );
 
     // Inizio lettura tag
     NfcManager.instance.startSession(
@@ -45,77 +40,54 @@ class _TagScreenState extends State<TagScreen> {
         NfcManager.instance.stopSession();
 
         // Ri-setto il CerchioConnessioneNFC
-        setState(() {
-          message = labels.attivazioneTagNFC;
-          coloreCerchio = Colors.orange;
-        });
+        setState(
+          () {
+            message = labels.attivazioneTagNFC;
+            coloreCerchio = Colors.grey;
+            icona = Icons.sensors_off;
+          },
+        );
 
         // Controllo per eventuali errori
         try {
-          // Passaggi per decodificare l'ID del tag NFC (Serial Number)
-          Uint8List identifier =
-              Uint8List.fromList(tag.data["mifareclassic"]['identifier']);
-
-          String nfcId = identifier
-              .map((e) => e.toRadixString(16).padLeft(2, '0'))
-              .join(':');
-
-          // Estrazione NFC ID senza : e in maiuscolo
-          nfcId = nfcId.replaceAll(RegExp(r':'), '').toUpperCase();
-
-          logger.d(nfcId);
-
-          // Richiamo del provider per estrarre le informazioni di accesso
-          var provider = Provider.of<Auth>(context, listen: false);
-
-          // Definizione informazioni di accesso necessarie per la timbratura
-          String? authToken = provider.token;
-          Actor? user = provider.user;
-          String? urlAmbiente = provider.urlAmbiente;
-
-          // Estrazione codice timbratura
-          String codice = await TimbraturaHelper.estraiCodiceTimbratura(
-            authToken!,
-            urlAmbiente!,
-            user!,
-          );
-
-          // Estrazione box associato alla timbratura
-          Box? box = await TimbraturaHelper.estraiBoxTimbratura(
-            authToken,
-            urlAmbiente,
-            nfcId,
-          );
-
-          // Definizione timbratura
-          Timbratura timbratura = Timbratura(
-            code: codice,
-            attore: user,
-            box: box,
-            dataTimbratura: DateTime.now(),
-            direzione: direzione,
-          );
-
-          // Funzione per registrare la timbratura
-          await Provider.of<Timbrature>(
-            context,
-            listen: false,
-          ).addTimbratura(timbratura);
-
-          // Apro la pagina di risultato timbratura passandogli la timbratura
-          Navigator.pushReplacementNamed(
-            context,
-            ResultScreen.routeName,
-            arguments: {
-              'timbratura': timbratura,
+          // Ri-setto il CerchioConnessioneNFC
+          setState(
+            () {
+              message = labels.letturaAvvenuta;
+              coloreCerchio = Colors.green;
+              icona = Icons.check;
             },
           );
+
+          // Gestisco la lettura del tag NFC
+          await TagHelper.gestisciTag(
+            tag,
+            context,
+            direzione,
+          );
         } catch (error) {
+          // Ri-setto il CerchioConnessioneNFC
+          setState(
+            () {
+              message = labels.erroreLettura;
+              coloreCerchio = Theme.of(context).colorScheme.error;
+              icona = Icons.error;
+            },
+          );
           // In caso di errori mostro il messaggio di errore
           _showErrorDialog(error.toString());
         }
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    var parameterData =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    var direzione = parameterData['direzione'];
+    _tagRead(direzione);
+    super.didChangeDependencies();
   }
 
   // Dialogo messaggio di errore
@@ -156,21 +128,23 @@ class _TagScreenState extends State<TagScreen> {
           future: NfcManager.instance.isAvailable(),
           builder: (context, ss) => ss.data != true
               ? Container(
+                  color: Theme.of(context).colorScheme.secondary,
                   child: Center(
                     child: CerchioConnessioneNFC(
                       () {},
                       labels.erroreTagNFC,
+                      Icons.error,
                       Theme.of(context).colorScheme.error,
                     ),
                   ),
                 )
               : Container(
+                  color: Theme.of(context).colorScheme.secondary,
                   child: Center(
                     child: CerchioConnessioneNFC(
-                      () {
-                        _tagRead(direzione);
-                      },
+                      () => _tagRead(direzione),
                       message,
+                      icona,
                       coloreCerchio,
                     ),
                   ),

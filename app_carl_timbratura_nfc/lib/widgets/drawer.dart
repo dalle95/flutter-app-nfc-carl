@@ -8,13 +8,9 @@ import '../providers/auth.dart';
 import '../screens/timbrature_list_screen.dart';
 
 class MainDrawer extends StatelessWidget {
-  Widget buildListTile(
-    Function()? tapHandler,
-    IconData icon,
-    String text,
-    Color iconColor,
-    Color textColor,
-  ) {
+  Widget buildListTile(Function()? tapHandler, IconData icon, String text,
+      Color iconColor, Color textColor,
+      [String subTitle = '']) {
     return ListTile(
       leading: Icon(
         icon,
@@ -30,6 +26,7 @@ class MainDrawer extends StatelessWidget {
         ),
       ),
       onTap: tapHandler,
+      subtitle: Text(subTitle),
     );
   }
 
@@ -74,17 +71,18 @@ class MainDrawer extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            alignment: Alignment.bottomLeft,
-            color: Theme.of(context).colorScheme.primary,
-            padding: const EdgeInsets.all(20),
+            alignment: Alignment.centerLeft,
+            color: Theme.of(context).appBarTheme.backgroundColor,
+            padding: const EdgeInsets.only(top: 40, left: 20),
             width: double.infinity,
-            height: 120,
-            child: Text(
-              labels.titoloApp,
-              style: TextStyle(
-                color: Theme.of(context).appBarTheme.foregroundColor,
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
+            height: 130,
+            child: SizedBox(
+              width: 150,
+              height: 70,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child:
+                    Image.asset('assets/images/Logo_Injenia_Maggioli_IT.png'),
               ),
             ),
           ),
@@ -95,7 +93,7 @@ class MainDrawer extends StatelessWidget {
             () {},
             Icons.account_circle_rounded,
             '${labels.utente_duepunti} $actorName',
-            Theme.of(context).colorScheme.secondary,
+            Theme.of(context).colorScheme.primary,
             Colors.black,
           ),
           const SizedBox(
@@ -109,17 +107,7 @@ class MainDrawer extends StatelessWidget {
             },
             Icons.share_arrival_time_outlined,
             labels.elencoTimbrature,
-            Theme.of(context).colorScheme.secondary,
-            Colors.black,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          buildListTile(
-            () {},
-            Icons.info,
-            labels.infoApp,
-            Theme.of(context).colorScheme.secondary,
+            Theme.of(context).colorScheme.primary,
             Colors.black,
           ),
           const SizedBox(
@@ -129,9 +117,21 @@ class MainDrawer extends StatelessWidget {
             _logout,
             Icons.logout,
             labels.logout,
-            Theme.of(context).colorScheme.secondary,
+            Theme.of(context).colorScheme.primary,
             Colors.black,
-          )
+          ),
+          Expanded(child: SizedBox()),
+          buildListTile(
+            () {},
+            Icons.info,
+            labels.infoApp,
+            Theme.of(context).colorScheme.primary,
+            Colors.black,
+            'Versione 1.0',
+          ),
+          const SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );

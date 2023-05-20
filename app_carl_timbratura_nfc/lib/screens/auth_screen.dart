@@ -1,3 +1,4 @@
+import 'package:app_carl_timbratura_nfc/url_ambiente.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,17 +20,8 @@ class AuthScreen extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColorDark
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0, 1],
-              ),
-            ),
+            decoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.secondary),
           ),
           SingleChildScrollView(
             child: Container(
@@ -108,7 +100,7 @@ class _AuthCardState extends State<AuthCard> {
     try {
       // Log user in
       await Provider.of<Auth>(context, listen: false).login(
-        'https://demo-4.in-am.it/gmaoCS04',
+        ambiente.url,
         _authData['username']!,
         _authData['password']!,
       );
@@ -119,18 +111,15 @@ class _AuthCardState extends State<AuthCard> {
       var errorMessage = labels.erroreAutenticazione;
       throw errorMessage;
     }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       elevation: 8.0,
       child: Container(
@@ -148,7 +137,7 @@ class _AuthCardState extends State<AuthCard> {
                     labels.titoloApp,
                     style: TextStyle(
                       fontSize: 30,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -195,19 +184,23 @@ class _AuthCardState extends State<AuthCard> {
                   if (_isLoading)
                     LoadingIndicator(labels.caricamento)
                   else
-                    ElevatedButton(
-                      child: Text(
-                        labels.connessione,
-                        style: TextStyle(
-                          fontSize: 20,
+                    SizedBox(
+                      height: deviceSize.height * 0.07,
+                      width: deviceSize.width * 0.4,
+                      child: ElevatedButton(
+                        child: Text(
+                          labels.connessione,
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                      onPressed: _submit,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        foregroundColor:
-                            Theme.of(context).colorScheme.background,
+                        onPressed: _submit,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          //minimumSize: sizeButton,
+                        ),
                       ),
                     ),
                 ],

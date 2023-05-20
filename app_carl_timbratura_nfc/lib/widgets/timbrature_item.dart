@@ -34,7 +34,7 @@ class _TimbraturaItemState extends State<TimbraturaItem> {
               widget.timbratura.direzione == labels.entrata
                   ? Icons.login
                   : Icons.logout,
-              color: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.primary,
               size: 40,
             ),
             title: Text(

@@ -31,9 +31,18 @@ class LabelMap {
   String get uscita => 'Uscita';
 
   // Pagina TagScreen
-  String get attivazioneTagNFC => 'Premere per rilevare la lettura.';
+  String get attivazioneTagNFC => 'Premere per rilevare la lettura';
   String get letturaTagNFC => 'Pronto a leggere l\'NFC';
   String get erroreTagNFC => 'Sensore NFC non disponibile.';
+
+  // Pagina ResultScreen
+  String get utente => 'Utente';
+  String get posizione => 'Posizione';
+  String get dataEora => 'Data e ora';
+  String get direzione => 'Direzione';
+  String get codice => 'Codice';
+  String get letturaAvvenuta => 'Lettura avvenuta';
+  String get erroreLettura => 'Errore nella lettura';
 
   // Pagina Login
   String get titoloApp => 'Timbratore';

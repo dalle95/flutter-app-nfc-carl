@@ -1,6 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
+import '../themes/app_theme.dart';
 
 import '../label.dart';
 
@@ -14,61 +19,53 @@ import '../screens/tag_screen.dart';
 import '../screens/result_screen.dart';
 import '../screens/timbrature_list_screen.dart';
 
-void main() {
-  runApp(MyApp());
+// Toggle this for testing Crashlytics in your app locally.
+const _kTestingCrashlytics = true;
+
+// Inizializzazione App
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Inizializzazione Firebase
+  await Firebase.initializeApp(
+      //   options: DefaultFirebaseOptions.currentPlatform,
+      );
+  FlutterError.onError = (errorDetails) {
+    // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  runApp(App());
 }
 
-class MyApp extends StatefulWidget {
+class App extends StatefulWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<App> createState() => _AppState();
 }
 
-final theme = ThemeData(
-  brightness: Brightness.light,
-  primaryColor: Colors.blue,
-  primaryColorDark: const Color.fromARGB(255, 11, 50, 113),
-  secondaryHeaderColor: Colors.orange,
-  colorScheme: ColorScheme.fromSwatch().copyWith(
-    primary: Color.fromRGBO(255, 152, 0, 1),
-    onPrimary: Colors.orangeAccent,
-    secondary: Color.fromRGBO(82, 68, 56, 1),
-    onSecondary: Colors.black87,
-    background: Colors.white,
-    onBackground: Colors.black87,
-    error: Colors.redAccent,
-  ),
-  appBarTheme: const AppBarTheme(
-    foregroundColor: Colors.white,
-    backgroundColor: Colors.orangeAccent,
-  ),
-  buttonTheme: const ButtonThemeData(
-    buttonColor: Colors.orange,
-  ),
-  textButtonTheme: TextButtonThemeData(
-    style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
-    ),
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
-      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-    ),
-  ),
-  textTheme: const TextTheme(
-    displayLarge: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-    displayMedium: TextStyle(
-        fontSize: 20, color: Colors.orange, fontStyle: FontStyle.normal),
-    bodyLarge: TextStyle(
-      fontSize: 25.0,
-      color: Colors.black,
-      fontFamily: 'Hind',
-    ),
-    bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-  ),
-);
+class _AppState extends State<App> {
+  // Define an async function to initialize FlutterFire
+  Future<void> _initializeFlutterFire() async {
+    if (_kTestingCrashlytics) {
+      // Force enable crashlytics collection enabled if we're testing it.
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    } else {
+      // Else only enable it in non-debug builds.
+      // You could additionally extend this to allow users to opt-in.
+      await FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(!kDebugMode);
+    }
+  }
 
-class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeFlutterFire();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

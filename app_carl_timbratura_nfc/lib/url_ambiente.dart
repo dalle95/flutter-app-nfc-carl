@@ -2,5 +2,5 @@ final Ambiente ambiente = Ambiente();
 
 class Ambiente {
   // Url ambiente collegato
-  String get url => 'https://demo-4.in-am.it/gmaoCS04';
+  String get url => 'https://impi.in-am.it/gmaoCS02';
 }

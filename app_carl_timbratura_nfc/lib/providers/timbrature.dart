@@ -155,7 +155,7 @@ class Timbrature with ChangeNotifier {
             'code': timbratura.code,
             'direzione': timbratura.direzione,
             'dataTimbratura':
-                "${timbratura.dataTimbratura.toIso8601String().substring(0, 23)}+00:00",
+                "${timbratura.dataTimbratura.toIso8601String().substring(0, 23)}+02:00",
           },
           'relationships': {
             "utente": {
@@ -175,7 +175,6 @@ class Timbrature with ChangeNotifier {
       },
     );
 
-    logger.d(data);
     try {
       final response = await http.post(
         url,

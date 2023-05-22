@@ -53,6 +53,9 @@ class Auth with ChangeNotifier {
   ) async {
     logger.d("Funzione authenticate");
 
+    logger.d(
+        'urlAmbiente: ${urlAmbiente}, username: ${username}, password: ${password}');
+
     // Chiamata per autenticare l'utente richiedendo il token
     try {
       var url = Uri.parse(
@@ -62,7 +65,8 @@ class Auth with ChangeNotifier {
 
       // Gestione errore credenziali
       if (response.statusCode >= 400) {
-        throw HttpException('Le credenziali non sono valide');
+        throw HttpException(
+            'Le credenziali non sono valide o l\'utente è bloccato');
       }
 
       logger.d(json.decode(response.body));

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 import '../models/actor.dart';
@@ -53,12 +52,9 @@ class Timbrature with ChangeNotifier {
       "X-CS-Access-Token": authToken!,
     };
 
-    // Definizione periodo di riferimento per estrarre solo le timbrature del mese attuale
-    String periodoRiferimento = DateFormat("yyyy-MM").format(DateTime.now());
-
     // Definizione del link della chiamata
     var url = Uri.parse(
-      '$urlAmbiente/api/entities/v1/road?include=box&filter[utente.code]=${user!.code}&dataTimbratura[LIKE]=$periodoRiferimento',
+      '$urlAmbiente/api/entities/v1/road?include=box&filter[utente.code]=${user!.code}',
     );
 
     // Preparazione del try-catch degli errori

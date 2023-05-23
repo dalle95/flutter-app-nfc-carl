@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -30,14 +31,15 @@ class TimbraturaHelper {
 
     // Definizione variabili per gestione codice
     int numero = 1;
+    String codicePrecedente;
     String codice;
     String numeroStringa;
 
     // Funzione per estrarre le timbrature
 
     // Definizione URL per lista timbrature
-    url =
-        Uri.parse('$urlAmbiente/api/entities/v1/road?filter[code][LIKE]=TIM-');
+    url = Uri.parse(
+        '$urlAmbiente/api/entities/v1/road?fields=code&page[limit]=1&sort=-dataTimbratura');
 
     // Creazione chiamata GET ricerca timbrature
     try {
@@ -54,16 +56,32 @@ class TimbraturaHelper {
         throw HttpException(
           json.decode(response.body)['errors'][0]['title'].toString(),
         );
-      } else {
-        // Estrazione dati
-        extractedData = json.decode(response.body) as Map<String, dynamic>;
-        numero = extractedData['data'].length + 1;
       }
-      // Converto il numero in stringa
-      numeroStringa = '0000$numero';
+
+      // Estrazione dati
+      extractedData = json.decode(response.body) as Map<String, dynamic>;
+
+      logger.d(extractedData);
+
+      // Setto il numero come 1 se non esistono dati
+      if ((extractedData['data'] as List).isEmpty) {
+        numero = 1;
+      } else {
+        // Estrazione ultimo codice registrato
+        codicePrecedente = extractedData['data'][0]['attributes']['code'];
+
+        // Conversione in int per incremento
+        numero = int.parse(
+              codicePrecedente.substring(codicePrecedente.length - 7),
+            ) +
+            1;
+      }
+
+      // Conversione in stringa
+      numeroStringa = '0000000$numero';
 
       // Definisco il codice della timbratura
-      codice = 'TIM-${numeroStringa.substring(numeroStringa.length - 5)}';
+      codice = 'TIM-${numeroStringa.substring(numeroStringa.length - 7)}';
 
       // Restituisco il codice della timbratura
       return codice;

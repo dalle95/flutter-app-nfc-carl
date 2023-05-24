@@ -14,8 +14,7 @@ class Auth with ChangeNotifier {
   String? _token;
   Actor? _user;
 
-  DateTime? _expiryDate;
-  Timer? _authTimer;
+  DateTime? _refreshDate;
 
   // Per gestire i log
   var logger = Logger();
@@ -37,12 +36,7 @@ class Auth with ChangeNotifier {
 
   // Recupero del token di autenticazione
   String? get token {
-    if (_expiryDate != null &&
-        _expiryDate!.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
-    return null;
+    return _token;
   }
 
   // Funzione di autenticazione
@@ -69,14 +63,14 @@ class Auth with ChangeNotifier {
             'Le credenziali non sono valide o l\'utente è bloccato');
       }
 
-      logger.d(json.decode(response.body));
-
       var responseData = json.decode(response.body);
 
       _urlAmbiente = urlAmbiente;
       _token = responseData['X-CS-Access-Token'];
-      _expiryDate = DateTime.now().add(
-        const Duration(seconds: 432000),
+      _refreshDate = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
       );
 
       // Chiamata per estrarre le informazioni utente
@@ -92,16 +86,15 @@ class Auth with ChangeNotifier {
 
         responseData = json.decode(response.body);
 
-        logger.d(responseData);
-
         // Recupero dell'attore associato e definizione delle informazioni
         var actorID = responseData['included'][0]['id'];
+        var actorCode = responseData['included'][0]['attributes']['code'];
         var actorNome = responseData['included'][0]['attributes']['fullName'];
 
         // Definisco l'utente
         _user = Actor(
           id: actorID,
-          code: username,
+          code: actorCode,
           nome: actorNome,
         );
 
@@ -112,11 +105,8 @@ class Auth with ChangeNotifier {
       }
       notifyListeners();
 
-      // Inizializzo la funzione per l'auto logout
-      _autoLogout();
-
       logger.d(
-          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, AmbienteUrl: $_urlAmbiente, Data scadenza: ${_expiryDate.toString()}');
+          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, AmbienteUrl: $_urlAmbiente, Data scadenza: ${_refreshDate.toString()}');
 
       // Preparo l'istanza FlutterSecureStorage per salvare i dati di autenticazione
       final storage = const FlutterSecureStorage();
@@ -125,10 +115,13 @@ class Auth with ChangeNotifier {
         {
           'url': _urlAmbiente,
           'token': _token,
+          'username': username,
+          'password': password,
           'user_id': _user!.id,
           'user_code': _user!.code,
           'user_nome': _user!.nome,
-          'expiryDate': _expiryDate!.toIso8601String(),
+          'user_password': password,
+          'refreshDate': _refreshDate!.toIso8601String(),
         },
       );
 
@@ -171,14 +164,22 @@ class Auth with ChangeNotifier {
 
     logger.d(extractedUserData);
 
-    logger.d(
-      'Dati sul dispositivo: ${json.decode(await storage.read(key: 'userData') ?? '')}',
-    );
+    // Recupero le informazioni principali
+    final refreshDate = DateTime.parse(extractedUserData['refreshDate']);
+    final username = extractedUserData['username'];
+    final password = extractedUserData['password'];
+    final urlAmbiente = extractedUserData['url'];
 
-    final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
-
-    if (expiryDate.isBefore(DateTime.now())) {
-      return false;
+    // Controllo la data di refresh del token: se non è di oggi rifaccio l'autenticazione
+    if (refreshDate !=
+        DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        )) {
+      // Refresh del token
+      await _authenticate(urlAmbiente, username, password);
+      return isAuth;
     }
 
     // Definizione dati di autenticazione
@@ -191,15 +192,16 @@ class Auth with ChangeNotifier {
       nome: extractedUserData['user_nome'],
     );
 
-    _expiryDate = expiryDate;
+    _refreshDate = refreshDate;
+
     notifyListeners();
-    _autoLogout();
     return true;
   }
 
   // Funzione per la disconnessione
   void logoout() async {
     logger.d('Funzione logout');
+
     // Inizializzo le variabili di autenticazione come nulle
     _urlAmbiente = null;
     _token = null;
@@ -208,13 +210,7 @@ class Auth with ChangeNotifier {
       code: '',
       nome: '',
     );
-    _expiryDate = null;
-
-    // Se è attivo un timer lo elimino
-    if (_authTimer != null) {
-      _authTimer!.cancel();
-      _authTimer = null;
-    }
+    _refreshDate = null;
 
     // Preparo l'istanza FlutterSecureStorage per aggiornare i dati di autenticazione
     final storage = const FlutterSecureStorage();
@@ -223,6 +219,8 @@ class Auth with ChangeNotifier {
       {
         'url': null,
         'token': null,
+        'username': null,
+        'password': null,
         'user_id': null,
         'user_code': null,
         'user_nome': null,
@@ -234,16 +232,5 @@ class Auth with ChangeNotifier {
     storage.write(key: 'userData', value: userData);
 
     notifyListeners();
-  }
-
-  // Funzione per la disconnessione automatica allo scadere del token
-  void _autoLogout() {
-    if (_authTimer != null) {
-      _authTimer!.cancel();
-    }
-    // Definisco il tempo di scadenza del token
-    final timeToExpiry = _expiryDate!.difference(DateTime.now()).inSeconds;
-    // Inizializzo un timer per la disconnessione automatica
-    _authTimer = Timer(Duration(seconds: timeToExpiry), logoout);
   }
 }

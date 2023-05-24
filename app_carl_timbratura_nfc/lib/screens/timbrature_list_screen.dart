@@ -33,8 +33,11 @@ class TimbraturaListScreen extends StatelessWidget {
               return LoadingIndicator(labels.caricamento);
             } else {
               if (dataSnapshot.error != null) {
-                return Center(
-                  child: Text(labels.erroreTitolo),
+                return RefreshIndicator(
+                  onRefresh: () => _refreshProducts(context),
+                  child: Center(
+                    child: Text(labels.erroreTitolo),
+                  ),
                 );
                 //Error
               } else {

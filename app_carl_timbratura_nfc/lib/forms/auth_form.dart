@@ -179,7 +179,6 @@ class _AuthFormState extends State<AuthForm> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          //minimumSize: sizeButton,
                         ),
                       ),
                     ),

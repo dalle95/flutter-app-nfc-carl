@@ -53,9 +53,12 @@ class Auth with ChangeNotifier {
     // Chiamata per autenticare l'utente richiedendo il token
     try {
       var url = Uri.parse(
-          '$urlAmbiente/api/auth/v1/authenticate?login=$username&password=$password&origin=Postman_SCA'); // Per eseguire l'autenticazione
+        '$urlAmbiente/api/auth/v1/authenticate?login=$username&password=$password&origin=Postman_SCA',
+      ); // Per eseguire l'autenticazione
 
       var response = await http.post(url);
+
+      logger.d(response.body);
 
       // Gestione errore credenziali
       if (response.statusCode >= 400) {
@@ -76,13 +79,22 @@ class Auth with ChangeNotifier {
       // Chiamata per estrarre le informazioni utente
       try {
         url = Uri.parse(
-            '$urlAmbiente/api/entities/v1/user?include=actor&filter[login]=$username');
+          '$urlAmbiente/api/entities/v1/user?fields=code&include=actor&filter[login]=$username',
+        );
         response = await http.get(
           url,
           headers: {
             "X-CS-Access-Token": _token!,
           },
         );
+
+        logger.d(response.body);
+
+        // Gestione errore credenziali
+        if (response.statusCode >= 400) {
+          throw HttpException(
+              'Le credenziali non sono valide o l\'utente è bloccato');
+        }
 
         responseData = json.decode(response.body);
 

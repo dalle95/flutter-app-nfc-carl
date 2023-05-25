@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../label.dart';
+
+import '../providers/auth.dart';
 
 import '../screens/tag_screen.dart';
 
@@ -13,8 +16,31 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final sizeButton = const Size(350, 250);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    // Per gestire l'auto autenticazione al resume dell'applicazione
+    if (state == AppLifecycleState.resumed) {
+      await Provider.of<Auth>(
+        context,
+        listen: false,
+      ).tryAutoLogin();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

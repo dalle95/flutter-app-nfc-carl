@@ -99,7 +99,7 @@ class _AppState extends State<App> {
             Locale('it'),
           ],
           home: auth.isAuth
-              ? MyHomePage()
+              ? HomePage()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapshot) =>
@@ -109,7 +109,7 @@ class _AppState extends State<App> {
                           : AuthScreen(),
                 ),
           routes: {
-            MyHomePage.routeName: (ctx) => MyHomePage(),
+            HomePage.routeName: (ctx) => HomePage(),
             TagScreen.routeName: (ctx) => TagScreen(),
             ResultScreen.routeName: (ctx) => ResultScreen(),
             TimbraturaListScreen.routeName: (ctx) => TimbraturaListScreen(),

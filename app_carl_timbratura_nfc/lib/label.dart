@@ -24,6 +24,8 @@ class LabelMap {
       'Non è possibile esesguire l\'autenticazione, prova più tardi.';
   String get erroreNomeNullo => 'Nome invalido!';
   String get errorePasswordNulla => 'La password non può essere nulla!';
+  String get credenzialiNonValideOUtenteBloccato =>
+      'Le credenziali non sono valide o l\'utente è bloccato';
 
   // Homepage
   String get registraEntrata => 'Registra entrata';

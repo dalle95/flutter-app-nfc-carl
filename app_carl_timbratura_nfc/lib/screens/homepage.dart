@@ -9,14 +9,14 @@ import '../screens/tag_screen.dart';
 
 import '../widgets/drawer.dart';
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   static const routeName = '/home';
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final sizeButton = const Size(350, 250);
 
   @override
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(labels.titoloApp),
+        title: Text(labels.tagScreenTitolo),
       ),
       drawer: MainDrawer(),
       body: Container(

@@ -5,7 +5,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
+import '../label.dart';
+
 import '../models/actor.dart';
+
 import '../error_handling/http_exception.dart';
 
 // Classe per gestire l'autenticazione
@@ -62,8 +65,7 @@ class Auth with ChangeNotifier {
 
       // Gestione errore credenziali
       if (response.statusCode >= 400) {
-        throw HttpException(
-            'Le credenziali non sono valide o l\'utente è bloccato');
+        throw HttpException(labels.credenzialiNonValideOUtenteBloccato);
       }
 
       var responseData = json.decode(response.body);
@@ -79,7 +81,7 @@ class Auth with ChangeNotifier {
       // Chiamata per estrarre le informazioni utente
       try {
         url = Uri.parse(
-          '$urlAmbiente/api/entities/v1/user?fields=code&include=actor&filter[login]=$username',
+          '$urlAmbiente/api/entities/v1/actor?filter[code]=$username', // username = codice attore
         );
         response = await http.get(
           url,
@@ -92,16 +94,15 @@ class Auth with ChangeNotifier {
 
         // Gestione errore credenziali
         if (response.statusCode >= 400) {
-          throw HttpException(
-              'Le credenziali non sono valide o l\'utente è bloccato');
+          throw HttpException(labels.erroreAutenticazione);
         }
 
         responseData = json.decode(response.body);
 
         // Recupero dell'attore associato e definizione delle informazioni
-        var actorID = responseData['included'][0]['id'];
-        var actorCode = responseData['included'][0]['attributes']['code'];
-        var actorNome = responseData['included'][0]['attributes']['fullName'];
+        var actorID = responseData['data'][0]['id'];
+        var actorCode = responseData['data'][0]['attributes']['code'];
+        var actorNome = responseData['data'][0]['attributes']['fullName'];
 
         // Definisco l'utente
         _user = Actor(

@@ -26,7 +26,11 @@ class AuthScreen extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
-                    child: const AuthForm(),
+                    child: SizedBox(
+                      child: const AuthForm(),
+                      height: deviceSize.height * 0.4,
+                      width: deviceSize.width * 0.8,
+                    ),
                   ),
                 ],
               ),

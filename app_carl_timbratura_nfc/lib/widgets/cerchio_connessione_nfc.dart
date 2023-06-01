@@ -15,8 +15,11 @@ class CerchioConnessioneNFC extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+
     // Grandezza pulsante
-    final sizeButton = const Size(370, 370);
+    final sizeButton = Size(deviceSize.width * 0.9, deviceSize.width * 0.9);
+
     return SizedBox.fromSize(
       size: sizeButton,
       child: ClipOval(

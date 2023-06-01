@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492966341011:android:00ea4de7683851d0986066",
+        "android_client_info": {
+          "package_name": "it.injenia.carl_timbratoreNCF.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "492966341011-d6c4uvv6o51r7iv4n6csf0utna88h6ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0LgM-bVhEQzB007b6dprSrqQBXw7Sl7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "492966341011-d6c4uvv6o51r7iv4n6csf0utna88h6ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

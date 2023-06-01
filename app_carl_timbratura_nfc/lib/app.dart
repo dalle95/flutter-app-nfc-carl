@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import '../themes/app_theme.dart';
@@ -21,25 +20,6 @@ import '../screens/timbrature_list_screen.dart';
 
 // Toggle this for testing Crashlytics in your app locally.
 const _kTestingCrashlytics = true;
-
-// Inizializzazione App
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  // Inizializzazione Firebase
-  await Firebase.initializeApp(
-      //   options: DefaultFirebaseOptions.currentPlatform,
-      );
-  FlutterError.onError = (errorDetails) {
-    // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  };
-  PlatformDispatcher.instance.onError = (error, stack) {
-    // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
-  runApp(App());
-}
 
 class App extends StatefulWidget {
   @override

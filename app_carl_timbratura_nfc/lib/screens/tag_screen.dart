@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 import '../label.dart';
@@ -19,8 +18,6 @@ class _TagScreenState extends State<TagScreen> {
   String message = labels.attivazioneTagNFC;
   Color coloreCerchio = Colors.grey;
   IconData icona = Icons.sensors_off;
-
-  var logger = Logger();
 
   // Funzione lettura Tag NFC
   void _tagRead(String direzione) {

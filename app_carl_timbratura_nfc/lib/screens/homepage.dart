@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../label.dart';
-
-import '../providers/auth.dart';
 
 import '../screens/tag_screen.dart';
 
@@ -16,34 +13,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> {
   final sizeButton = const Size(350, 250);
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    // Per gestire l'auto autenticazione al resume dell'applicazione
-    if (state == AppLifecycleState.resumed) {
-      await Provider.of<Auth>(
-        context,
-        listen: false,
-      ).tryAutoLogin();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(labels.tagScreenTitolo),
@@ -52,7 +28,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       body: Container(
         color: Theme.of(context).colorScheme.secondary,
         alignment: Alignment.center,
-        child: Padding(
+        child: Container(
+          width: deviceSize.width * 0.95,
+          height: deviceSize.height,
           padding: const EdgeInsets.all(10.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

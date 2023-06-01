@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../label.dart';
@@ -7,7 +8,30 @@ import '../providers/auth.dart';
 
 import '../screens/timbrature_list_screen.dart';
 
-class MainDrawer extends StatelessWidget {
+class MainDrawer extends StatefulWidget {
+  @override
+  State<MainDrawer> createState() => _MainDrawerState();
+}
+
+class _MainDrawerState extends State<MainDrawer> {
+  // Definizione variabile per estrarre informazioni app
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+    buildSignature: 'Unknown',
+    installerStore: 'Unknown',
+  );
+
+  // Funzione per estrarre le informazioni app
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
+
   Widget buildListTile(Function()? tapHandler, IconData icon, String text,
       Color iconColor, Color textColor,
       [String subTitle = '']) {
@@ -28,6 +52,12 @@ class MainDrawer extends StatelessWidget {
       onTap: tapHandler,
       subtitle: Text(subTitle),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
   }
 
   @override
@@ -127,7 +157,7 @@ class MainDrawer extends StatelessWidget {
             labels.infoApp,
             Theme.of(context).colorScheme.primary,
             Colors.black,
-            'Versione 1.0',
+            'Versione ${_packageInfo.version} Build: ${_packageInfo.buildNumber}',
           ),
           const SizedBox(
             height: 10,

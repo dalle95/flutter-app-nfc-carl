@@ -1,3 +1,4 @@
+import 'package:app_carl_timbratura_nfc/routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,9 +15,6 @@ import '../providers/timbrature.dart';
 import '../screens/homepage.dart';
 import '../screens/auth_screen.dart';
 import '../screens/spash_screen.dart';
-import '../screens/tag_screen.dart';
-import '../screens/result_screen.dart';
-import '../screens/timbrature_list_screen.dart';
 
 // Toggle this for testing Crashlytics in your app locally.
 const _kTestingCrashlytics = true;
@@ -67,34 +65,31 @@ class _AppState extends State<App> {
         ),
       ],
       child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-          title: labels.titoloApp,
-          theme: theme,
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('it'),
-          ],
-          home: auth.isAuth
-              ? HomePage()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, authResultSnapshot) =>
-                      authResultSnapshot.connectionState ==
-                              ConnectionState.waiting
-                          ? SplashScreen()
-                          : AuthScreen(),
-                ),
-          routes: {
-            HomePage.routeName: (ctx) => HomePage(),
-            TagScreen.routeName: (ctx) => TagScreen(),
-            ResultScreen.routeName: (ctx) => ResultScreen(),
-            TimbraturaListScreen.routeName: (ctx) => TimbraturaListScreen(),
-          },
-        ),
+        builder: (ctx, auth, _) {
+          return MaterialApp(
+            title: labels.titoloApp,
+            theme: theme,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('it'),
+            ],
+            home: auth.isAuth
+                ? HomePage()
+                : FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (ctx, authResultSnapshot) =>
+                        authResultSnapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? SplashScreen()
+                            : AuthScreen(),
+                  ),
+            routes: routes,
+          );
+        },
       ),
     );
   }

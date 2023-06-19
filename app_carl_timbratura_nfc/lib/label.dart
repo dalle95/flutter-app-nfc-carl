@@ -17,6 +17,12 @@ class LabelMap {
   String get login => 'Login';
   String get disconnessioneMessaggio => 'Disconnettersi dall\'applicazione?';
   String get utente_duepunti => 'Utente:';
+  String get aggiornamentoApp => 'Aggiornamento App';
+  String get messaggioAggiornamento =>
+      'É disponibile una nuova versione dell\'app.\nPremendo su scarica verrà eseguito il download e aggiornata ora.';
+  String get scarica => 'Scarica';
+  String get initDownload => 'Inizializzazione download';
+  String get progressDownload => 'Download in corso';
 
   // Errori
   String get erroreTitolo => 'Si è verificato un errore';
@@ -26,6 +32,8 @@ class LabelMap {
   String get errorePasswordNulla => 'La password non può essere nulla!';
   String get credenzialiNonValideOUtenteBloccato =>
       'Le credenziali non sono valide o l\'utente è bloccato';
+  String get tagNonAssociato =>
+      'Non esiste un box associato a questo tag NFC.\nContattare gli amministratori di sistema.';
 
   // Homepage
   String get registraEntrata => 'Registra entrata';

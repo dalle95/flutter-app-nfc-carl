@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_carl_timbratura_nfc/label.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
@@ -139,7 +140,7 @@ class TimbraturaHelper {
       // Se i dati sono nulli restituisco l'errore
       if (extractedData['data'].toString() == '[]') {
         throw HttpException(
-          'Non esiste un box associato a questo tag NFC. Esequire prima l\'associazione',
+          labels.tagNonAssociato,
         );
       }
     } catch (error) {

@@ -94,7 +94,7 @@ class TimbraturaHelper {
   static Future<Box?> estraiBoxTimbratura(
     String authToken,
     String urlAmbiente,
-    String nfcId,
+    String  nfcId,
   ) async {
     var logger = Logger();
     logger.d('Funzione estraiBoxTimbratura');

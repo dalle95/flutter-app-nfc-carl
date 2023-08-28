@@ -1,14 +1,17 @@
-import 'package:app_carl_timbratura_nfc/routes.dart';
+import 'package:app_carl_timbratura_nfc/screens/configuration_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
+import '../routes.dart';
+
 import '../themes/app_theme.dart';
 
 import '../label.dart';
 
+import '../providers/configurazioneAmbiente.dart';
 import '../providers/auth.dart';
 import '../providers/timbrature.dart';
 
@@ -49,7 +52,16 @@ class _AppState extends State<App> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => Auth(),
+          create: (ctx) => ConfigurazioneAmbiente(),
+        ),
+        ChangeNotifierProxyProvider<ConfigurazioneAmbiente, Auth>(
+          create: (ctx) => Auth(
+            urlAmbiente: null,
+          ),
+          update: (ctx, config, auth) => Auth(
+            nome: auth?.nome == null ? null : auth!.nome,
+            urlAmbiente: config.urlAmbiente,
+          ),
         ),
         ChangeNotifierProxyProvider<Auth, Timbrature>(
           create: (ctx) => Timbrature(
@@ -64,8 +76,8 @@ class _AppState extends State<App> {
           ),
         ),
       ],
-      child: Consumer<Auth>(
-        builder: (ctx, auth, _) {
+      child: Consumer<ConfigurazioneAmbiente>(
+        builder: (ctx, config, _) {
           return MaterialApp(
             title: labels.titoloApp,
             theme: theme,
@@ -77,15 +89,28 @@ class _AppState extends State<App> {
             supportedLocales: const [
               Locale('it'),
             ],
-            home: auth.isAuth
-                ? HomePage()
+            home: config.isConfigured
+                ? Consumer<Auth>(
+                    builder: (ctx, auth, _) {
+                      return auth.isAuth
+                          ? HomePage()
+                          : FutureBuilder(
+                              future: auth.tryAutoLogin(),
+                              builder: (ctx, authResultSnapshot) =>
+                                  authResultSnapshot.connectionState ==
+                                          ConnectionState.waiting
+                                      ? SplashScreen()
+                                      : AuthScreen(),
+                            );
+                    },
+                  )
                 : FutureBuilder(
-                    future: auth.tryAutoLogin(),
+                    future: config.recuperaConfigurazione(),
                     builder: (ctx, authResultSnapshot) =>
                         authResultSnapshot.connectionState ==
                                 ConnectionState.waiting
                             ? SplashScreen()
-                            : AuthScreen(),
+                            : ConfigurationScreen(),
                   ),
             routes: routes,
           );

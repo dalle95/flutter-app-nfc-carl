@@ -27,7 +27,7 @@ class TimbraturaList extends StatelessWidget {
           )
         : ListView.builder(
             itemCount: items.length,
-            itemBuilder: (ctx, i) => TimbraturaItem(items[i]),
+            itemBuilder: (ctx, i) => TimbraturaItem(timbratura: items[i]),
           );
   }
 }

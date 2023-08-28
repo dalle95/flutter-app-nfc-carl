@@ -97,11 +97,11 @@ class _TagScreenState extends State<TagScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(ctx).pop();
             },
             child: Text(labels.conferma),
             style: TextButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(ctx).colorScheme.background,
             ),
           )
         ],

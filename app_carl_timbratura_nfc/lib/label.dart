@@ -34,6 +34,9 @@ class LabelMap {
       'Le credenziali non sono valide o l\'utente è bloccato';
   String get tagNonAssociato =>
       'Non esiste un box associato a questo tag NFC.\nContattare gli amministratori di sistema.';
+  String get erroreTitoloQrCodeInvalido => 'QR Code non valido';
+  String get erroreContentQrCodeInvalido =>
+      'Per completare la configurazione si prega di scannerizzare il QR Code della schermata "a proposito di CARL Touch" in CARL Source per completare la configurazione';
 
   // Homepage
   String get registraEntrata => 'Registra entrata';
@@ -53,6 +56,11 @@ class LabelMap {
   String get codice => 'Codice';
   String get letturaAvvenuta => 'Lettura avvenuta';
   String get erroreLettura => 'Errore nella lettura';
+
+  // Pagina Config
+  String get infoConfigurazione =>
+      'Scannerizzare il QR Code della schermata "a proposito di CARL Touch" in CARL Source per completare la configurazione';
+  String get scannerizzare => 'Scannerizzare';
 
   // Pagina Login
   String get titoloApp => 'Timbratore';

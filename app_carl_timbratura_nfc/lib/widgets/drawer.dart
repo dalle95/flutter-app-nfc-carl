@@ -157,7 +157,7 @@ class _MainDrawerState extends State<MainDrawer> {
             labels.infoApp,
             Theme.of(context).colorScheme.primary,
             Colors.black,
-            'Versione ${_packageInfo.version} Build: ${_packageInfo.buildNumber}',
+            'Versione ${_packageInfo.version}',
           ),
           const SizedBox(
             height: 10,

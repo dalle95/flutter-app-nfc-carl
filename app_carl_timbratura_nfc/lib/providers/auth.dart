@@ -13,23 +13,26 @@ import '../error_handling/http_exception.dart';
 
 // Classe per gestire l'autenticazione
 class Auth with ChangeNotifier {
-  String? _urlAmbiente;
+  String? urlAmbiente;
+
+  // Per gestire i log
+  var logger = Logger();
+
+  String? nome;
+
+  Auth({
+    this.urlAmbiente,
+    this.nome,
+  });
+
   String? _token;
   Actor? _user;
 
   DateTime? _refreshDate;
 
-  // Per gestire i log
-  var logger = Logger();
-
   // Controllo se l'utente è loggato
   bool get isAuth {
     return _token != null;
-  }
-
-  // Recupero dell'url ambiente
-  String? get urlAmbiente {
-    return _urlAmbiente;
   }
 
   // Recupero dell'utente collegato
@@ -42,9 +45,17 @@ class Auth with ChangeNotifier {
     return _token;
   }
 
+  String? get username {
+    return nome;
+  }
+
+  void settaUsername(String username) {
+    nome = username;
+    notifyListeners();
+  }
+
   // Funzione di autenticazione
   Future<void> _authenticate(
-    String urlAmbiente,
     String username,
     String password,
   ) async {
@@ -70,7 +81,6 @@ class Auth with ChangeNotifier {
 
       var responseData = json.decode(response.body);
 
-      _urlAmbiente = urlAmbiente;
       _token = responseData['X-CS-Access-Token'];
       _refreshDate = DateTime(
         DateTime.now().year,
@@ -119,14 +129,13 @@ class Auth with ChangeNotifier {
       notifyListeners();
 
       logger.d(
-          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, AmbienteUrl: $_urlAmbiente, Data scadenza: ${_refreshDate.toString()}');
+          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, AmbienteUrl: $urlAmbiente, Data scadenza: ${_refreshDate.toString()}');
 
       // Preparo l'istanza FlutterSecureStorage per salvare i dati di autenticazione
       final storage = const FlutterSecureStorage();
 
       final userData = json.encode(
         {
-          'url': _urlAmbiente,
           'token': _token,
           'username': username,
           'password': password,
@@ -151,9 +160,15 @@ class Auth with ChangeNotifier {
 
   // Funzione di login
   Future<void> login(
-      String urlAmbiente, String username, String password) async {
+    //String urlAmbiente,
+    String username,
+    String password,
+  ) async {
     logger.d('Funzione login');
-    return _authenticate(urlAmbiente, username, password);
+    return _authenticate(
+      username,
+      password,
+    );
   }
 
   // Funzione per il login automatico all'apertura dell'app
@@ -181,34 +196,39 @@ class Auth with ChangeNotifier {
     final refreshDate = DateTime.parse(extractedUserData['refreshDate']);
     final username = extractedUserData['username'];
     final password = extractedUserData['password'];
-    final urlAmbiente = extractedUserData['url'];
 
-    // Controllo la data di refresh del token: se non è di oggi rifaccio l'autenticazione
-    if (refreshDate !=
-        DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().day,
-        )) {
-      // Refresh del token
-      await _authenticate(urlAmbiente, username, password);
-      return isAuth;
+    if (username != null && password != null) {
+// Controllo la data di refresh del token: se non è di oggi rifaccio l'autenticazione
+      if (refreshDate !=
+          DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+          )) {
+        // Refresh del token
+        await _authenticate(
+          username,
+          password,
+        );
+        return isAuth;
+      }
+
+      // Definizione dati di autenticazione
+      _token = extractedUserData['token'];
+
+      _user = Actor(
+        id: extractedUserData['user_id'],
+        code: extractedUserData['user_code'],
+        nome: extractedUserData['user_nome'],
+      );
+
+      _refreshDate = refreshDate;
+
+      notifyListeners();
+      return true;
     }
 
-    // Definizione dati di autenticazione
-    _urlAmbiente = extractedUserData['url'];
-    _token = extractedUserData['token'];
-
-    _user = Actor(
-      id: extractedUserData['user_id'],
-      code: extractedUserData['user_code'],
-      nome: extractedUserData['user_nome'],
-    );
-
-    _refreshDate = refreshDate;
-
-    notifyListeners();
-    return true;
+    return false;
   }
 
   // Funzione per la disconnessione
@@ -216,7 +236,6 @@ class Auth with ChangeNotifier {
     logger.d('Funzione logout');
 
     // Inizializzo le variabili di autenticazione come nulle
-    _urlAmbiente = null;
     _token = null;
     _user = Actor(
       id: null,
@@ -230,7 +249,6 @@ class Auth with ChangeNotifier {
 
     final userData = json.encode(
       {
-        'url': null,
         'token': null,
         'username': null,
         'password': null,

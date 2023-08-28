@@ -1,8 +1,5 @@
-import 'package:app_carl_timbratura_nfc/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../url_ambiente.dart';
 
 import '../label.dart';
 
@@ -10,8 +7,13 @@ import '../error_handling/http_exception.dart';
 
 import '../providers/auth.dart';
 
+import '../widgets/loading_indicator.dart';
+
 class AuthForm extends StatefulWidget {
-  const AuthForm({
+  final String? username;
+
+  AuthForm({
+    this.username,
     Key? key,
   }) : super(key: key);
 
@@ -20,6 +22,15 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
+  @override
+  void initState() {
+    if (widget.username != null) {
+      _usernameController.text = widget.username!;
+    }
+
+    super.initState();
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final Map<String, String> _authData = {
@@ -27,6 +38,8 @@ class _AuthFormState extends State<AuthForm> {
     'password': '',
   };
   var _isLoading = false;
+
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   // Dialogo messaggio di errore
@@ -39,11 +52,11 @@ class _AuthFormState extends State<AuthForm> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(ctx).pop();
             },
             child: Text(labels.conferma),
             style: TextButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(ctx).colorScheme.background,
             ),
           )
         ],
@@ -67,7 +80,7 @@ class _AuthFormState extends State<AuthForm> {
     try {
       // Log user in
       await Provider.of<Auth>(context, listen: false).login(
-        ambiente.url,
+        //ambiente.url,
         _authData['username']!,
         _authData['password']!,
       );
@@ -128,6 +141,7 @@ class _AuthFormState extends State<AuthForm> {
                         contentPadding: EdgeInsets.zero),
                     keyboardType: TextInputType.name,
                     textAlign: TextAlign.center,
+                    controller: _usernameController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return labels.erroreNomeNullo;

@@ -40,17 +40,19 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   package_info_plus: ^4.0.2
+  path_provider: ^2.0.15
+  open_filex: ^4.3.2
+  mobile_scanner: ^3.4.1
+
+  # Firebase
   firebase_crashlytics: ^3.3.1
   firebase_core: ^2.13.0
-
+  firebase_remote_config: ^4.2.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  firebase_remote_config: ^4.2.3
-  path_provider: ^2.0.15
-  open_filex: ^4.3.2
-  
+
 
 dev_dependencies:
   flutter_test:

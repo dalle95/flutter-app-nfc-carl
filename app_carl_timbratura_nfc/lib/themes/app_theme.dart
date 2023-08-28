@@ -18,6 +18,9 @@ final theme = ThemeData(
     foregroundColor: Colors.white,
     backgroundColor: Colors.orangeAccent,
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Colors.orange,
+  ),
   buttonTheme: const ButtonThemeData(
     buttonColor: Colors.orange,
   ),

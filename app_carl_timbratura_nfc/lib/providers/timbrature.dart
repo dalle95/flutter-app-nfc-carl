@@ -54,7 +54,7 @@ class Timbrature with ChangeNotifier {
 
     // Definizione del link della chiamata
     var url = Uri.parse(
-      '$urlAmbiente/api/entities/v1/road?include=box&filter[utente.code]=${user!.code}&page[limit]=100',
+      '$urlAmbiente/api/entities/v1/road?include=box&filter[utente.code]=${user!.code}&page[limit]=50&sort=-dataTimbratura',
     );
 
     // Preparazione del try-catch degli errori

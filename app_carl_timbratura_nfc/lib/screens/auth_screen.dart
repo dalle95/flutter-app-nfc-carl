@@ -56,7 +56,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     flex: deviceSize.width > 600 ? 2 : 1,
                     child: SizedBox(
                       child: AuthForm(username: username),
-                      height: deviceSize.height * 0.4,
+                      height: deviceSize.height * 0.55,
                       width: deviceSize.width * 0.8,
                     ),
                   ),

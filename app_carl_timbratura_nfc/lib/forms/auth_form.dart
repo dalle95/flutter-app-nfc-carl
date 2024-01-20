@@ -7,8 +7,6 @@ import '../error_handling/http_exception.dart';
 
 import '../providers/auth.dart';
 
-import '../widgets/loading_indicator.dart';
-
 class AuthForm extends StatefulWidget {
   final String? username;
 
@@ -126,6 +124,15 @@ class _AuthFormState extends State<AuthForm> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
+                  SizedBox(
+                    width: 80,
+                    height: 80,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Image.asset('icons/icon.png'),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Text(
                     labels.titoloApp,
                     style: TextStyle(
@@ -135,48 +142,65 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        labelText: labels.login,
-                        contentPadding: EdgeInsets.zero),
-                    keyboardType: TextInputType.name,
-                    textAlign: TextAlign.center,
-                    controller: _usernameController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return labels.erroreNomeNullo;
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _authData['username'] = value!;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: labels.password,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        label: Center(
+                          child: Text(labels.login),
+                        ),
+                      ),
+                      keyboardType: TextInputType.name,
+                      textAlign: TextAlign.center,
+                      controller: _usernameController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return labels.erroreNomeNullo;
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _authData['username'] = value!;
+                      },
                     ),
-                    obscureText: true,
-                    textAlign: TextAlign.center,
-                    controller: _passwordController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return labels.errorePasswordNulla;
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _authData['password'] = value!;
-                    },
-                    onFieldSubmitted: (_) {
-                      _submit();
-                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        label: Center(
+                          child: Text(labels.password),
+                        ),
+                      ),
+                      obscureText: true,
+                      textAlign: TextAlign.center,
+                      controller: _passwordController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return labels.errorePasswordNulla;
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _authData['password'] = value!;
+                      },
+                      onFieldSubmitted: (_) {
+                        _submit();
+                      },
+                    ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   if (_isLoading)
-                    LoadingIndicator(labels.caricamento)
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: Image.asset('assets/gifs/spinner.gif'),
+                      ),
+                    )
                   else
                     SizedBox(
                       height: deviceSize.height * 0.07,

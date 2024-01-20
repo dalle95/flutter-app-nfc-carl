@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '/label.dart';
+
 class LoadingIndicator extends StatelessWidget {
   final String message;
 
@@ -8,14 +10,46 @@ class LoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          CircularProgressIndicator(
-            color: Theme.of(context).colorScheme.secondary,
+          Container(
+            alignment: Alignment.center,
+            color: Color.fromRGBO(
+              255,
+              255,
+              255,
+              1,
+            ), //Theme.of(context).colorScheme.background,
+            padding: const EdgeInsets.all(20),
+            width: double.infinity,
+            height: double.infinity,
+            child: SizedBox(
+              width: 150,
+              height: 70,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.asset('assets/gifs/spinner.gif'),
+              ),
+            ),
           ),
-          Text(message),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 200),
+              child: Text(
+                labels.titoloApp,
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 200),
+              child: Text(message),
+            ),
+          ),
         ],
       ),
     );

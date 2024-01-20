@@ -61,6 +61,11 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     qrCodeDati = await Navigator.of(context)
                         .pushNamed(QRCodeReaderScreen.routeName);
 
+                    // qrCodeDati = {
+                    //   'urlAmbiente': 'https://impi.in-am.it/gmaoCS02/',
+                    //   'username': 'DEMO',
+                    // };
+
                     Provider.of<Auth>(
                       context,
                       listen: false,

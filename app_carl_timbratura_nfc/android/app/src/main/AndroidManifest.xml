@@ -11,7 +11,7 @@
    <uses-feature android:name="android.hardware.nfc" android:required="true" />
    
    <application
-        android:label="Timbratore NFC"
+        android:label="InGiro"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

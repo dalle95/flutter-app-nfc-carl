@@ -1,23 +1,24 @@
-import 'package:app_carl_timbratura_nfc/screens/configuration_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-import '../routes.dart';
+import '/routes.dart';
 
-import '../themes/app_theme.dart';
+import '/themes/app_theme.dart';
 
-import '../label.dart';
+import '/label.dart';
 
-import '../providers/configurazioneAmbiente.dart';
-import '../providers/auth.dart';
-import '../providers/timbrature.dart';
+import '/providers/configurazioneAmbiente.dart';
+import '/providers/auth.dart';
+import '/providers/timbrature.dart';
+import '/providers/boxes.dart';
 
-import '../screens/homepage.dart';
-import '../screens/auth_screen.dart';
-import '../screens/spash_screen.dart';
+import '/screens/homepage.dart';
+import '/screens/auth_screen.dart';
+import '/screens/spash_screen.dart';
+import '/screens/configuration_screen.dart';
 
 // Toggle this for testing Crashlytics in your app locally.
 const _kTestingCrashlytics = true;
@@ -73,6 +74,18 @@ class _AppState extends State<App> {
             user: auth.user,
             timbratureLista:
                 previousTimbrature == null ? [] : previousTimbrature.timbrature,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Boxes>(
+          create: (ctx) => Boxes(
+            boxesLista: [],
+          ),
+          update: (ctx, auth, previousTimbrature) => Boxes(
+            urlAmbiente: auth.urlAmbiente,
+            authToken: auth.token,
+            user: auth.user,
+            boxesLista:
+                previousTimbrature == null ? [] : previousTimbrature.boxes,
           ),
         ),
       ],

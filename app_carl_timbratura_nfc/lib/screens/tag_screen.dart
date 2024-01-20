@@ -20,7 +20,7 @@ class _TagScreenState extends State<TagScreen> {
   IconData icona = Icons.sensors_off;
 
   // Funzione lettura Tag NFC
-  void _tagRead(String direzione) {
+  void _tagRead(String? direzione) {
     // Modifico il CerchioConnessioneNFC per informare che l'app è pronta alla lettura del NFC
     setState(
       () {
@@ -56,12 +56,22 @@ class _TagScreenState extends State<TagScreen> {
             },
           );
 
-          // Gestisco la lettura del tag NFC
-          await TagHelper.gestisciTag(
-            tag,
-            context,
-            direzione,
-          );
+          // Fase di timbratura
+          if (direzione != null) {
+            // Gestisco la lettura del tag NFC
+            await TagHelper.gestisciTag(
+              tag,
+              context,
+              direzione,
+            );
+          }
+          // Fase di taggatura
+          else {
+            // Estraggo l'NFC ID
+            String? nfcId = await TagHelper.estraiNFCId(context, tag);
+
+            Navigator.of(context).pop(nfcId);
+          }
         } catch (error) {
           // Ri-setto il CerchioConnessioneNFC
           setState(
@@ -82,8 +92,12 @@ class _TagScreenState extends State<TagScreen> {
   void didChangeDependencies() {
     var parameterData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    // Variabile per la gestione della fase di timbratura o taggatura (nel caso è null)
     var direzione = parameterData['direzione'];
+
+    // Lancio la funzione per preparare la lettura
     _tagRead(direzione);
+
     super.didChangeDependencies();
   }
 
@@ -94,6 +108,7 @@ class _TagScreenState extends State<TagScreen> {
       builder: (ctx) => AlertDialog(
         title: Text(labels.erroreTitolo),
         content: Text(message),
+        actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () {
@@ -118,7 +133,7 @@ class _TagScreenState extends State<TagScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(labels.tagScreenTitolo),
+        title: Text(labels.letturaTag),
       ),
       body: SafeArea(
         child: FutureBuilder<bool>(

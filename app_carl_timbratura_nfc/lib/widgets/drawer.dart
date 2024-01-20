@@ -6,7 +6,8 @@ import '../label.dart';
 
 import '../providers/auth.dart';
 
-import '../screens/timbrature_list_screen.dart';
+import '/screens/timbrature_list_screen.dart';
+import '/screens/posizioni_list_screen.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -95,6 +96,8 @@ class _MainDrawerState extends State<MainDrawer> {
     }
 
     final actorName = Provider.of<Auth>(context, listen: false).user!.nome;
+    final actorResponsabile =
+        Provider.of<Auth>(context, listen: false).user!.responsabile;
 
     // Drawer
     return Drawer(
@@ -140,6 +143,24 @@ class _MainDrawerState extends State<MainDrawer> {
             Theme.of(context).colorScheme.primary,
             Colors.black,
           ),
+          actorResponsabile == true
+              ? const SizedBox(
+                  height: 10,
+                )
+              : Container(),
+          actorResponsabile == true
+              ? buildListTile(
+                  () {
+                    Navigator.of(context).pushNamed(
+                      PosizioneListScreen.routeName,
+                    );
+                  },
+                  Icons.location_on,
+                  labels.elencoPosizioni,
+                  Theme.of(context).colorScheme.primary,
+                  Colors.black,
+                )
+              : Container(),
           const SizedBox(
             height: 10,
           ),

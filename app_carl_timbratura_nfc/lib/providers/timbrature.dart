@@ -54,7 +54,7 @@ class Timbrature with ChangeNotifier {
 
     // Definizione del link della chiamata
     var url = Uri.parse(
-      '$urlAmbiente/api/entities/v1/road?include=box&filter[utente.code]=${user!.code}&page[limit]=50&sort=-dataTimbratura',
+      '$urlAmbiente/api/entities/v1/road?include=box&filter[utente.code]=${user!.code}&filter[roadType]=Timbratura&page[limit]=50&sort=-code',
     );
 
     // Preparazione del try-catch degli errori
@@ -160,6 +160,7 @@ class Timbrature with ChangeNotifier {
             'direzione': timbratura.direzione,
             'dataTimbratura':
                 "${timbratura.dataTimbratura.toIso8601String().substring(0, 23)}+02:00",
+            'roadType': 'Timbratura'
           },
           'relationships': {
             "utente": {

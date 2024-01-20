@@ -39,7 +39,7 @@ class TimbraturaHelper {
 
     // Definizione URL per lista timbrature
     url = Uri.parse(
-        '$urlAmbiente/api/entities/v1/road?fields=code&page[limit]=1&sort=-dataTimbratura');
+        '$urlAmbiente/api/entities/v1/road?fields=code&filter[roadType]=Timbratura&page[limit]=1&sort=-code');
 
     // Creazione chiamata GET ricerca timbrature
     try {
@@ -94,7 +94,8 @@ class TimbraturaHelper {
   static Future<Box?> estraiBoxTimbratura(
     String authToken,
     String urlAmbiente,
-    String  nfcId,
+    String nfcId,
+    bool throwError,
   ) async {
     var logger = Logger();
     logger.d('Funzione estraiBoxTimbratura');
@@ -110,7 +111,7 @@ class TimbraturaHelper {
     http.Response response;
 
     // Definisco il box che restituisco
-    Box box;
+    Box? box;
 
     // Funzione per estrarre il BOX associato al tag NFC
 
@@ -135,26 +136,29 @@ class TimbraturaHelper {
       // Estrazione dati
       extractedData = json.decode(response.body) as Map<String, dynamic>;
 
-      logger.d(extractedData);
-
-      // Se i dati sono nulli restituisco l'errore
-      if (extractedData['data'].toString() == '[]') {
-        throw HttpException(
-          labels.tagNonAssociato,
-        );
+      // Gestisco il lancio dell'errore
+      if (throwError) {
+        // Se i dati sono nulli restituisco l'errore
+        if (extractedData['data'].toString() == '[]') {
+          throw HttpException(
+            labels.tagNonAssociato,
+          );
+        }
       }
     } catch (error) {
       throw error;
     }
 
-    // Definizione BOX associato al tag NFC
-    box = Box(
-      id: extractedData['data'][0]['id'],
-      code: extractedData['data'][0]['attributes']['code'],
-      description: extractedData['data'][0]['attributes']['description'],
-      eqptType: extractedData['data'][0]['attributes']['eqptType'],
-      statusCode: extractedData['data'][0]['attributes']['statusCode'],
-    );
+    if (extractedData['data'].isNotEmpty) {
+      // Definizione BOX associato al tag NFC
+      box = Box(
+        id: extractedData['data'][0]['id'],
+        code: extractedData['data'][0]['attributes']['code'],
+        description: extractedData['data'][0]['attributes']['description'],
+        eqptType: extractedData['data'][0]['attributes']['eqptType'],
+        statusCode: extractedData['data'][0]['attributes']['statusCode'],
+      );
+    }
 
     return box;
   }

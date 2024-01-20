@@ -17,13 +17,11 @@ import '../../providers/timbrature.dart';
 import '../../screens/result_screen.dart';
 
 class TagHelper {
-  static Future<void> gestisciTag(
-    NfcTag tag,
+  // Funzione per estrarre l'NFC ID del Tag
+  static String estraiNFCId(
     BuildContext context,
-    String direzione,
-  ) async {
-    var logger = Logger();
-
+    NfcTag tag,
+  ) {
     try {
       // Passaggi per decodificare l'ID del tag NFC (Serial Number)
       Uint8List identifier =
@@ -35,7 +33,52 @@ class TagHelper {
       // Estrazione NFC ID senza : e in maiuscolo
       nfcId = nfcId.replaceAll(RegExp(r':'), '').toUpperCase();
 
-      logger.d(nfcId);
+      return nfcId;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  // Funzione per controllare se il Tag NFC è già associato ad un BOX
+  static Future<bool> checkTagAssegnato(
+    BuildContext context,
+    String nfcId,
+  ) async {
+    // Richiamo del provider per estrarre le informazioni di accesso
+    var provider = Provider.of<Auth>(context, listen: false);
+
+    // Definizione informazioni di accesso necessarie per la timbratura
+    String? authToken = provider.token;
+    Actor? user = provider.user;
+    String? urlAmbiente = provider.urlAmbiente;
+
+    // Estrazione box associato alla timbratura
+    Box? box = await TimbraturaHelper.estraiBoxTimbratura(
+      authToken!,
+      urlAmbiente!,
+      nfcId,
+      false,
+    );
+
+    // Controllo del return per presenza BOX associato
+    if (box != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Funzione per aggiungere la timbratura
+  static Future<void> gestisciTag(
+    NfcTag tag,
+    BuildContext context,
+    String direzione,
+  ) async {
+    var logger = Logger();
+
+    try {
+      // Estrazione nfcID
+      String nfcId = estraiNFCId(context, tag);
 
       // Richiamo del provider per estrarre le informazioni di accesso
       var provider = Provider.of<Auth>(context, listen: false);
@@ -57,6 +100,7 @@ class TagHelper {
         authToken,
         urlAmbiente,
         nfcId,
+        true,
       );
 
       // Definizione timbratura

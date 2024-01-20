@@ -49,6 +49,10 @@ class Auth with ChangeNotifier {
     return nome;
   }
 
+  bool? get responsabile {
+    return _user!.responsabile;
+  }
+
   void settaUsername(String username) {
     nome = username;
     notifyListeners();
@@ -113,12 +117,15 @@ class Auth with ChangeNotifier {
         var actorID = responseData['data'][0]['id'];
         var actorCode = responseData['data'][0]['attributes']['code'];
         var actorNome = responseData['data'][0]['attributes']['fullName'];
+        var actorResponsabile =
+            responseData['data'][0]['attributes']['responsabile'] ?? false;
 
         // Definisco l'utente
         _user = Actor(
           id: actorID,
           code: actorCode,
           nome: actorNome,
+          responsabile: actorResponsabile,
         );
 
         notifyListeners();
@@ -129,7 +136,7 @@ class Auth with ChangeNotifier {
       notifyListeners();
 
       logger.d(
-          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, AmbienteUrl: $urlAmbiente, Data scadenza: ${_refreshDate.toString()}');
+          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, ActorResponsabile: ${_user!.responsabile} AmbienteUrl: $urlAmbiente, Data scadenza: ${_refreshDate.toString()}');
 
       // Preparo l'istanza FlutterSecureStorage per salvare i dati di autenticazione
       final storage = const FlutterSecureStorage();
@@ -142,6 +149,7 @@ class Auth with ChangeNotifier {
           'user_id': _user!.id,
           'user_code': _user!.code,
           'user_nome': _user!.nome,
+          'user_responsabile': _user!.responsabile,
           'user_password': password,
           'refreshDate': _refreshDate!.toIso8601String(),
         },
@@ -220,6 +228,7 @@ class Auth with ChangeNotifier {
         id: extractedUserData['user_id'],
         code: extractedUserData['user_code'],
         nome: extractedUserData['user_nome'],
+        responsabile: extractedUserData['user_responsabile'],
       );
 
       _refreshDate = refreshDate;
@@ -255,6 +264,7 @@ class Auth with ChangeNotifier {
         'user_id': null,
         'user_code': null,
         'user_nome': null,
+        'user_responsabile': null,
         'expiryDate': null,
       },
     );

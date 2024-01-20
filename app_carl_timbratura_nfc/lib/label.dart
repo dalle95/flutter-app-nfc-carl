@@ -2,8 +2,10 @@ final LabelMap labels = LabelMap();
 
 class LabelMap {
   // Titoli App Bar
-  String get tagScreenTitolo => 'Timbratore NFC';
+  String get tagScreenTitolo => 'InGiro';
+  String get letturaTag => 'Lettura Tag';
   String get resultScreenTitolo => 'Dati timbratura';
+  String get detailPosizioneScreen => 'Dati pozisione';
 
   // Formato data
   String get formatoData => 'dd/MM/yyyy';
@@ -33,7 +35,7 @@ class LabelMap {
   String get credenzialiNonValideOUtenteBloccato =>
       'Le credenziali non sono valide o l\'utente è bloccato';
   String get tagNonAssociato =>
-      'Non esiste un box associato a questo tag NFC.\nContattare gli amministratori di sistema.';
+      'Non è presente nessuna posizione associata a questo tag NFC.\nEffettuare l\'associazione del tag alla posizione.';
   String get erroreTitoloQrCodeInvalido => 'QR Code non valido';
   String get erroreContentQrCodeInvalido =>
       'Per completare la configurazione si prega di scannerizzare il QR Code della schermata "a proposito di CARL Touch" in CARL Source per completare la configurazione';
@@ -63,11 +65,12 @@ class LabelMap {
   String get scannerizzare => 'Scannerizzare';
 
   // Pagina Login
-  String get titoloApp => 'Timbratore';
+  String get titoloApp => 'InGiro';
   String get password => 'Password';
 
   // Drawer
   String get elencoTimbrature => 'Elenco timbrature';
+  String get elencoPosizioni => 'Elenco posizioni';
   String get infoApp => 'Informazioni App';
 
   // Pagina TimbratureList
@@ -80,4 +83,21 @@ class LabelMap {
   String get codice_duepunti => 'Codice:';
   String get data_duepunti => 'Data:';
   String get ora_duepunti => 'Ora:';
+
+  // Pagina PosizioniList
+  String get nessunaPosizione => 'Non sono presenti posizioni.';
+
+  // Widget PosizioneItem
+  String get stato_duepunti => 'Stato:';
+  String get tagId_duepunti => 'Tag Id:';
+
+  // Pagina PosizioneDetailScreen
+  String get descrizione => 'Descrizione';
+  String get tag => 'TagID';
+  String get associaTag => 'Associa Tag';
+  String get disassociaTag => 'Disassocia Tag';
+  String get disassociazioneTagInCorso => 'Disassociazione Tag in corso';
+  String get associazioneTagInCorso => 'Associazione Tag in corso';
+  String get erroreTagAssociato =>
+      'Il tag è già associato ad un altra posizione.\nPer poterlo associare nuovamente è necessario disassociarlo dalla precedente posizione.';
 }

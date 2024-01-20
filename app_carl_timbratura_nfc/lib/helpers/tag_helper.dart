@@ -1,20 +1,19 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 
-import '../../helpers/timbratura_helper.dart';
+import '/helpers/timbratura_helper.dart';
 
-import '../../models/actor.dart';
-import '../../models/box.dart';
-import '../../models/timbratura.dart';
+import '/models/actor.dart';
+import '/models/box.dart';
+import '/models/timbratura.dart';
 
-import '../../providers/auth.dart';
-import '../../providers/timbrature.dart';
+import '/providers/auth.dart';
+import '/providers/timbrature.dart';
 
-import '../../screens/result_screen.dart';
+import '/screens/result_screen.dart';
 
 class TagHelper {
   // Funzione per estrarre l'NFC ID del Tag
@@ -49,7 +48,6 @@ class TagHelper {
 
     // Definizione informazioni di accesso necessarie per la timbratura
     String? authToken = provider.token;
-    Actor? user = provider.user;
     String? urlAmbiente = provider.urlAmbiente;
 
     // Estrazione box associato alla timbratura
@@ -74,8 +72,6 @@ class TagHelper {
     BuildContext context,
     String direzione,
   ) async {
-    var logger = Logger();
-
     try {
       // Estrazione nfcID
       String nfcId = estraiNFCId(context, tag);

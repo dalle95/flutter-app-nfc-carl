@@ -102,7 +102,7 @@ class _AuthFormState extends State<AuthForm> {
         },
       );
       var errorMessage = labels.erroreAutenticazione;
-      throw error;
+      throw errorMessage;
     }
   }
 

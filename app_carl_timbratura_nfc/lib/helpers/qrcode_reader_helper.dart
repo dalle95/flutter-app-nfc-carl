@@ -9,25 +9,23 @@ class QRCodeHelper {
     // Per gestire i log
     var logger = Logger();
 
-    if (qrcodeDati != null) {
-      try {
-        urlAmbiente = qrcodeDati.toString().substring(
-              0,
-              qrcodeDati.toString().indexOf('?'),
-            );
-        username = qrcodeDati!.toString().substring(
-              qrcodeDati.toString().indexOf('userLogin=') + 10,
-            );
+    try {
+      urlAmbiente = qrcodeDati.toString().substring(
+            0,
+            qrcodeDati.toString().indexOf('?'),
+          );
+      username = qrcodeDati.toString().substring(
+            qrcodeDati.toString().indexOf('userLogin=') + 10,
+          );
 
-        dati = {
-          'urlAmbiente': urlAmbiente,
-          'username': username,
-        };
+      dati = {
+        'urlAmbiente': urlAmbiente,
+        'username': username,
+      };
 
-        logger.d(dati);
-      } catch (error) {
-        throw error;
-      }
+      logger.d(dati);
+    } catch (error) {
+      throw error;
     }
 
     return dati;

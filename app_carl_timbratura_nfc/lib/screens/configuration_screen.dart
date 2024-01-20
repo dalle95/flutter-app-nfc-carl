@@ -1,13 +1,12 @@
-import 'package:app_carl_timbratura_nfc/providers/auth.dart';
-import 'package:app_carl_timbratura_nfc/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../label.dart';
+import '/label.dart';
 
-import '../providers/configurazioneAmbiente.dart';
+import '/providers/auth.dart';
+import '/providers/configurazioneAmbiente.dart';
 
-import '../screens/qr_reader_screen.dart';
+import '/screens/qr_reader_screen.dart';
 
 class ConfigurationScreen extends StatefulWidget {
   const ConfigurationScreen({Key? key}) : super(key: key);

@@ -112,9 +112,21 @@ class Timbrature with ChangeNotifier {
         }
 
         // Per gestire l'orario locale e non quello UTC della data
-        DateTime dataTimbratura =
-            DateTime.parse(timbratura['attributes']['dataTimbratura'])
-                .toLocal();
+        DateTime dataTimbratura = DateTime.parse(
+                timbratura['attributes']['dataTimbratura'])
+            .toLocal()
+            .add(
+              Duration(
+                hours: int.parse(timbratura['attributes']['dataTimbratura']
+                    .substring(
+                        timbratura['attributes']['dataTimbratura'].length - 6)
+                    .substring(0, 3)),
+                minutes: int.parse(timbratura['attributes']['dataTimbratura']
+                    .substring(
+                        timbratura['attributes']['dataTimbratura'].length - 6)
+                    .substring(4)),
+              ),
+            );
 
         // Aggiunta WorkTime alla lista
         loadedTimbrature.add(

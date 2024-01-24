@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../label.dart';
-
 import '../helpers/aggiornamento_app_helper.dart';
 
 import '../widgets/drawer.dart';
@@ -61,7 +59,14 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(labels.tagScreenTitolo),
+        title: SizedBox(
+          width: 100,
+          height: 40,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Image.asset('assets/images/injenia_logo_color 4.png'),
+          ),
+        ),
       ),
       drawer: MainDrawer(),
       body: _isAggiornamentoApp

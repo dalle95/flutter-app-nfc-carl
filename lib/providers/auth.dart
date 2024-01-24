@@ -95,7 +95,7 @@ class Auth with ChangeNotifier {
       // Chiamata per estrarre le informazioni utente
       try {
         url = Uri.parse(
-          '$urlAmbiente/api/entities/v1/actor?filter[code]=$username', // username = codice attore
+          '$urlAmbiente/api/entities/v1/user?include=actor&filter[login]=$username',
         );
         response = await http.get(
           url,
@@ -114,11 +114,11 @@ class Auth with ChangeNotifier {
         responseData = json.decode(response.body);
 
         // Recupero dell'attore associato e definizione delle informazioni
-        var actorID = responseData['data'][0]['id'];
-        var actorCode = responseData['data'][0]['attributes']['code'];
-        var actorNome = responseData['data'][0]['attributes']['fullName'];
+        var actorID = responseData['included'][0]['id'];
+        var actorCode = responseData['included'][0]['attributes']['code'];
+        var actorNome = responseData['included'][0]['attributes']['fullName'];
         var actorResponsabile =
-            responseData['data'][0]['attributes']['responsabile'] ?? false;
+            responseData['included'][0]['attributes']['responsabile'] ?? false;
 
         // Definisco l'utente
         _user = Actor(

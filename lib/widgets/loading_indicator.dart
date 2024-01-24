@@ -35,18 +35,19 @@ class LoadingIndicator extends StatelessWidget {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 200),
-              child: Text(
-                labels.titoloApp,
-                style: Theme.of(context)
-                    .textTheme
-                    .displayLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+              child: SizedBox(
+                width: 150,
+                height: 70,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Image.asset('assets/images/injenia_logo_color 4.png'),
+                ),
               ),
             ),
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 200),
+              padding: const EdgeInsets.only(top: 250),
               child: Text(message),
             ),
           ),

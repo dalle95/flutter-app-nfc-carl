@@ -124,21 +124,30 @@ class _AuthFormState extends State<AuthForm> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
+                  // SizedBox(
+                  //   width: 80,
+                  //   height: 80,
+                  //   child: FittedBox(
+                  //     fit: BoxFit.cover,
+                  //     child: Image.asset('icons/icon.png'),
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 10),
+                  // Text(
+                  //   labels.titoloApp,
+                  //   style: TextStyle(
+                  //     fontSize: 30,
+                  //     color: Theme.of(context).colorScheme.primary,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                   SizedBox(
-                    width: 80,
-                    height: 80,
+                    width: 150,
+                    height: 50,
                     child: FittedBox(
                       fit: BoxFit.cover,
-                      child: Image.asset('icons/icon.png'),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    labels.titoloApp,
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
+                      child:
+                          Image.asset('assets/images/injenia_logo_color 4.png'),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -194,7 +203,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   if (_isLoading)
                     SizedBox(
-                      height: 100,
+                      height: 80,
                       width: 100,
                       child: FittedBox(
                         fit: BoxFit.cover,

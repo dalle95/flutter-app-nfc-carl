@@ -38,7 +38,7 @@ class LabelMap {
       'Non è presente nessuna posizione associata a questo tag NFC.\nEffettuare l\'associazione del tag alla posizione.';
   String get erroreTitoloQrCodeInvalido => 'QR Code non valido';
   String get erroreContentQrCodeInvalido =>
-      'Per completare la configurazione si prega di scannerizzare il QR Code dell\'ambiente';
+      'Scannerizzare il QR Code dell\'ambiente per completare la configurazione';
 
   // Homepage
   String get registraEntrata => 'Registra entrata';
@@ -61,7 +61,7 @@ class LabelMap {
 
   // Pagina Config
   String get infoConfigurazione =>
-      'Scannerizzare il QR Code della schermata "a proposito di CARL Touch" in CARL Source per completare la configurazione';
+      'Scannerizzare il QR Code dell\'ambiente per completare la configurazione';
   String get scannerizzare => 'Scannerizzare';
 
   // Pagina Login

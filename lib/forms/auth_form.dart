@@ -124,23 +124,6 @@ class _AuthFormState extends State<AuthForm> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  // SizedBox(
-                  //   width: 80,
-                  //   height: 80,
-                  //   child: FittedBox(
-                  //     fit: BoxFit.cover,
-                  //     child: Image.asset('icons/icon.png'),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // Text(
-                  //   labels.titoloApp,
-                  //   style: TextStyle(
-                  //     fontSize: 30,
-                  //     color: Theme.of(context).colorScheme.primary,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
                   SizedBox(
                     width: 150,
                     height: 50,

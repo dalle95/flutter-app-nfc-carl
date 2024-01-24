@@ -20,7 +20,7 @@ class QRCodeHelper {
 
       dati = {
         'urlAmbiente': urlAmbiente,
-        'username': username,
+        'username': '',
       };
 
       logger.d(dati);

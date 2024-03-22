@@ -109,6 +109,7 @@ class _AuthFormState extends State<AuthForm> {
     final deviceSize = MediaQuery.of(context).size;
 
     return Card(
+      color: Theme.of(context).colorScheme.background,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -196,7 +197,7 @@ class _AuthFormState extends State<AuthForm> {
                   else
                     SizedBox(
                       height: deviceSize.height * 0.07,
-                      width: deviceSize.width * 0.4,
+                      width: deviceSize.width * 0.5,
                       child: ElevatedButton(
                         child: Text(
                           labels.connessione,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '/label.dart';
-
 class LoadingIndicator extends StatelessWidget {
   final String message;
 
@@ -25,7 +23,7 @@ class LoadingIndicator extends StatelessWidget {
             height: double.infinity,
             child: SizedBox(
               width: 150,
-              height: 70,
+              height: 100,
               child: FittedBox(
                 fit: BoxFit.cover,
                 child: Image.asset('assets/gifs/spinner.gif'),

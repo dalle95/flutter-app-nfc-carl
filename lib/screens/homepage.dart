@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../helpers/aggiornamento_app_helper.dart';
+import '/helpers/aggiornamento_app_helper.dart';
 
-import '../widgets/drawer.dart';
-import '../widgets/download_nuova_versione.dart';
-import '../widgets/selezione_entrata_uscita.dart';
+import '/widgets/drawer.dart';
+import '/widgets/download_nuova_versione.dart';
+import '/widgets/timbratura_view.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
@@ -68,13 +68,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      drawer: MainDrawer(),
+      drawer: _isAggiornamentoApp ? null : MainDrawer(),
       body: _isAggiornamentoApp
           ? DownloadNuovaVersioneApp(
               deviceSize: deviceSize,
               percentuale: _percentuale,
             )
-          : SelezioneEntrataUscita(
+          : TimbraturaView(
               deviceSize: deviceSize,
               sizeButton: sizeButton,
             ),

@@ -54,8 +54,8 @@ class _PosizioneItemState extends State<PosizioneItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${labels.codice_duepunti} ${widget.posizione!.code}'),
-                Text(
-                    '${labels.stato_duepunti} ${widget.posizione!.statusCode}'),
+                // Text(
+                //     '${labels.stato_duepunti} ${widget.posizione!.statusCode}'),
                 Text(
                     '${labels.tagId_duepunti} ${widget.posizione!.tag != null ? widget.posizione!.tag!.nfcId ?? 'Nessuno' : 'Nessuno'}'),
               ],

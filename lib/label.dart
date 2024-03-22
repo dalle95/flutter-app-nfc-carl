@@ -43,7 +43,10 @@ class LabelMap {
   // Homepage
   String get registraEntrata => 'Registra entrata';
   String get registraUscita => 'Registra uscita';
+  String get registraPassaggio => 'Registra passaggio';
+  String get entrata => 'Entrata';
   String get uscita => 'Uscita';
+  String get passaggio => 'Passaggio';
 
   // Pagina TagScreen
   String get attivazioneTagNFC => 'Premere per rilevare la lettura';
@@ -77,7 +80,6 @@ class LabelMap {
   String get nessunaTimbratura => 'Non sono presenti timbrature.';
 
   // Widget TimbraturaItem
-  String get entrata => 'Entrata';
   String get posizione_duepunti => 'Posizione:';
   String get direzione_dueounti => 'Direzione:';
   String get codice_duepunti => 'Codice:';

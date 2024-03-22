@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -36,22 +37,44 @@ class _MainDrawerState extends State<MainDrawer> {
   Widget buildListTile(Function()? tapHandler, IconData icon, String text,
       Color iconColor, Color textColor,
       [String subTitle = '']) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        size: 25,
-        color: iconColor,
-      ),
-      title: Text(
-        text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: tapHandler,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(5),
+              width: 30,
+              height: 30,
+              child: Icon(
+                icon,
+                size: 25,
+                color: iconColor,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 20),
+              width: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (subTitle != '') Text(subTitle),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
-      onTap: tapHandler,
-      subtitle: Text(subTitle),
     );
   }
 
@@ -120,17 +143,18 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
           ),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           buildListTile(
             () {},
             Icons.account_circle_rounded,
-            '${labels.utente_duepunti} $actorName',
+            labels.utente,
             Theme.of(context).colorScheme.primary,
             Colors.black,
+            '$actorName',
           ),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           buildListTile(
             () {
@@ -145,7 +169,7 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
           actorResponsabile == true
               ? const SizedBox(
-                  height: 10,
+                  height: 20,
                 )
               : Container(),
           actorResponsabile == true
@@ -162,7 +186,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 )
               : Container(),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           buildListTile(
             _logout,

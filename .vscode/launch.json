@@ -2,6 +2,16 @@
     "version": "0.2.0",
     "configurations": [
       {
+        "name": "app_carl_timbratura_nfc",
+        "request": "launch",
+        "type": "dart",
+        "args":[
+            "--flavor",
+            "prod",
+            "--web-port", "5000"
+         ]
+    },
+      {
         "name": "Production",
         "request": "launch",
         "type": "dart",

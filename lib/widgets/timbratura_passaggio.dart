@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../label.dart';
 import '../screens/tag_screen.dart';
 
-class SelezioneEntrataUscita extends StatelessWidget {
-  const SelezioneEntrataUscita({
+class TimbraturaPassaggio extends StatelessWidget {
+  const TimbraturaPassaggio({
     Key? key,
     required this.deviceSize,
     required this.sizeButton,
@@ -61,7 +61,7 @@ class SelezioneEntrataUscita extends StatelessWidget {
                             context,
                             TagScreen.routeName,
                             arguments: {
-                              'direzione': labels.entrata,
+                              'direzione': labels.passaggio,
                             },
                           );
                         },
@@ -69,11 +69,11 @@ class SelezioneEntrataUscita extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.login,
+                              Icons.open_in_browser_rounded,
                               size: 60,
                             ),
                             Text(
-                              labels.registraEntrata,
+                              labels.registraPassaggio,
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -82,48 +82,48 @@ class SelezioneEntrataUscita extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          foregroundColor: Colors.white,
-                          shadowColor: Theme.of(context).colorScheme.onPrimary,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          minimumSize: sizeButton,
-                        ),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            TagScreen.routeName,
-                            arguments: {
-                              'direzione': labels.uscita,
-                            },
-                          );
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.logout,
-                              size: 60,
-                            ),
-                            Text(
-                              labels.registraUscita,
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // Expanded(
+                    //   child: ElevatedButton(
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor:
+                    //           Theme.of(context).colorScheme.primary,
+                    //       foregroundColor: Colors.white,
+                    //       shadowColor: Theme.of(context).colorScheme.onPrimary,
+                    //       elevation: 5,
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(20.0),
+                    //       ),
+                    //       minimumSize: sizeButton,
+                    //     ),
+                    //     onPressed: () {
+                    //       Navigator.pushNamed(
+                    //         context,
+                    //         TagScreen.routeName,
+                    //         arguments: {
+                    //           'direzione': labels.uscita,
+                    //         },
+                    //       );
+                    //     },
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         Icon(
+                    //           Icons.logout,
+                    //           size: 60,
+                    //         ),
+                    //         Text(
+                    //           labels.registraUscita,
+                    //           style: TextStyle(
+                    //             fontSize: 20,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

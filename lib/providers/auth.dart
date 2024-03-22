@@ -45,12 +45,19 @@ class Auth with ChangeNotifier {
     return _token;
   }
 
+  // Recupero il nome utente
   String? get username {
     return nome;
   }
 
+  // Refupero se è responsabile
   bool? get responsabile {
     return _user!.responsabile;
+  }
+
+  // Recupero la tipologia di timbratura
+  String? get tipologiaTimbratura {
+    return _user!.tipologiaTimbratura;
   }
 
   void settaUsername(String username) {
@@ -95,7 +102,7 @@ class Auth with ChangeNotifier {
       // Chiamata per estrarre le informazioni utente
       try {
         url = Uri.parse(
-          '$urlAmbiente/api/entities/v1/user?include=actor&filter[login]=$username',
+          '$urlAmbiente/api/entities/v1/actor?filter[code]=$username', // username = codice attore
         );
         response = await http.get(
           url,
@@ -114,11 +121,19 @@ class Auth with ChangeNotifier {
         responseData = json.decode(response.body);
 
         // Recupero dell'attore associato e definizione delle informazioni
-        var actorID = responseData['included'][0]['id'];
-        var actorCode = responseData['included'][0]['attributes']['code'];
-        var actorNome = responseData['included'][0]['attributes']['fullName'];
+        var actorID = responseData['data'][0]['id'];
+        var actorCode = responseData['data'][0]['attributes']['code'];
+        var actorNome = responseData['data'][0]['attributes']['fullName'];
         var actorResponsabile =
-            responseData['included'][0]['attributes']['responsabile'] ?? false;
+            responseData['data'][0]['attributes']['responsabile'] ?? false;
+        var tipologiaTimbratura = 'Entrata - Uscita';
+
+        if (responseData['data'][0]['attributes']
+            .containsKey('tipologiaTimbratura')) {
+          tipologiaTimbratura = responseData['data'][0]['attributes']
+                  ['tipologiaTimbratura'] ??
+              'Entrata - Uscita';
+        }
 
         // Definisco l'utente
         _user = Actor(
@@ -126,6 +141,7 @@ class Auth with ChangeNotifier {
           code: actorCode,
           nome: actorNome,
           responsabile: actorResponsabile,
+          tipologiaTimbratura: tipologiaTimbratura,
         );
 
         notifyListeners();
@@ -136,7 +152,7 @@ class Auth with ChangeNotifier {
       notifyListeners();
 
       logger.d(
-          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, ActorResponsabile: ${_user!.responsabile} AmbienteUrl: $urlAmbiente, Data scadenza: ${_refreshDate.toString()}');
+          'Autenticazione: Token: $_token, ActorID: ${_user!.id}, ActorCode: ${_user!.code}, ActorResponsabile: ${_user!.responsabile}, TipologiaTimnbratura: ${_user!.tipologiaTimbratura}, AmbienteUrl: $urlAmbiente, Data scadenza: ${_refreshDate.toString()}');
 
       // Preparo l'istanza FlutterSecureStorage per salvare i dati di autenticazione
       final storage = const FlutterSecureStorage();
@@ -150,6 +166,7 @@ class Auth with ChangeNotifier {
           'user_code': _user!.code,
           'user_nome': _user!.nome,
           'user_responsabile': _user!.responsabile,
+          'tipologia_timbratura': _user!.tipologiaTimbratura,
           'user_password': password,
           'refreshDate': _refreshDate!.toIso8601String(),
         },
@@ -229,6 +246,7 @@ class Auth with ChangeNotifier {
         code: extractedUserData['user_code'],
         nome: extractedUserData['user_nome'],
         responsabile: extractedUserData['user_responsabile'],
+        tipologiaTimbratura: extractedUserData['tipologia_timbratura'],
       );
 
       _refreshDate = refreshDate;
@@ -265,6 +283,7 @@ class Auth with ChangeNotifier {
         'user_code': null,
         'user_nome': null,
         'user_responsabile': null,
+        'tipologia_timbratura': null,
         'expiryDate': null,
       },
     );

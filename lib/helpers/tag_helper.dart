@@ -23,8 +23,7 @@ class TagHelper {
   ) {
     try {
       // Passaggi per decodificare l'ID del tag NFC (Serial Number)
-      Uint8List identifier =
-          Uint8List.fromList(tag.data["mifareclassic"]['identifier']);
+      Uint8List identifier = Uint8List.fromList(tag.data["nfca"]['identifier']);
 
       String nfcId =
           identifier.map((e) => e.toRadixString(16).padLeft(2, '0')).join(':');
@@ -34,7 +33,7 @@ class TagHelper {
 
       return nfcId;
     } catch (error) {
-      rethrow;
+      throw 'Funzione estraiNFCId: $error';
     }
   }
 
@@ -123,7 +122,7 @@ class TagHelper {
         },
       );
     } catch (error) {
-      throw error;
+      throw 'Funzione gestisciTag: $error';
     }
   }
 }

@@ -14,16 +14,15 @@ import '../error_handling/http_exception.dart';
 // Classe per gestire l'autenticazione
 class Auth with ChangeNotifier {
   String? urlAmbiente;
-
-  // Per gestire i log
-  var logger = Logger();
-
   String? nome;
 
   Auth({
     this.urlAmbiente,
     this.nome,
   });
+
+  // Per gestire i log
+  var logger = Logger();
 
   String? _token;
   Actor? _user;
@@ -121,13 +120,14 @@ class Auth with ChangeNotifier {
         responseData = json.decode(response.body);
 
         // Recupero dell'attore associato e definizione delle informazioni
+        // Generali
         var actorID = responseData['data'][0]['id'];
         var actorCode = responseData['data'][0]['attributes']['code'];
         var actorNome = responseData['data'][0]['attributes']['fullName'];
+        // Specifiche per questa app
         var actorResponsabile =
             responseData['data'][0]['attributes']['responsabile'] ?? false;
         var tipologiaTimbratura = 'Entrata - Uscita';
-
         if (responseData['data'][0]['attributes']
             .containsKey('tipologiaTimbratura')) {
           tipologiaTimbratura = responseData['data'][0]['attributes']

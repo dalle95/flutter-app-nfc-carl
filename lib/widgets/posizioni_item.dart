@@ -29,7 +29,7 @@ class _PosizioneItemState extends State<PosizioneItem> {
         });
       },
       child: Card(
-        elevation: 2,
+        elevation: 3,
         margin: const EdgeInsets.symmetric(
           horizontal: 10,
           vertical: 5,

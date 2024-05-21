@@ -23,7 +23,7 @@ class _TimbraturaItemState extends State<TimbraturaItem> {
     return GestureDetector(
       onTap: () {},
       child: Card(
-        elevation: 2,
+        elevation: 1,
         margin: const EdgeInsets.symmetric(
           horizontal: 10,
           vertical: 5,

@@ -62,20 +62,21 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                         .pushNamed(QRCodeReaderScreen.routeName);
 
                     // qrCodeDati = {
-                    //   'urlAmbiente': 'https://impi.in-am.it/gmaoCS02/',
-                    //   'username': 'DEMO',
+                    //   'urlAmbiente': 'https://demo7.in-am.it/gmaoCS02/',
+                    //   'username': '',
                     // };
+                    if (qrCodeDati != null) {
+                      Provider.of<Auth>(
+                        context,
+                        listen: false,
+                      ).settaUsername(qrCodeDati['username']);
 
-                    Provider.of<Auth>(
-                      context,
-                      listen: false,
-                    ).settaUsername(qrCodeDati['username']);
-
-                    // Aggiorno il provider
-                    await Provider.of<ConfigurazioneAmbiente>(
-                      context,
-                      listen: false,
-                    ).configuraAmbiente(qrCodeDati['urlAmbiente']);
+                      // Aggiorno il provider
+                      await Provider.of<ConfigurazioneAmbiente>(
+                        context,
+                        listen: false,
+                      ).configuraAmbiente(qrCodeDati['urlAmbiente']);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,

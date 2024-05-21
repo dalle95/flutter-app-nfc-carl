@@ -33,8 +33,15 @@ class PosizioneListScreen extends StatelessWidget {
               if (dataSnapshot.error != null) {
                 return RefreshIndicator(
                   onRefresh: () => _refreshBoxes(context),
-                  child: Center(
-                    child: Text(labels.erroreTitolo),
+                  child: Container(
+                    color: Theme.of(context).colorScheme.secondary,
+                    alignment: Alignment.center,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Text(labels.erroreTitolo),
+                      ),
+                    ),
                   ),
                 );
                 //Error

@@ -112,29 +112,44 @@ class _PosizioneDetailScreenState extends State<PosizioneDetailScreen> {
       },
     );
 
-    // Controllo se il Tag NFC è già associato
-    var tagAssociato = await TagHelper.checkTagAssegnato(
-      context,
-      nfcID,
-    );
+    // Controllo di aver ricevuto il tag
+    if (nfcID != null) {
+      // Controllo se il Tag NFC è già associato
+      var tagAssociato = await TagHelper.checkTagAssegnato(
+        context,
+        nfcID,
+      );
 
-    // Se è già associato un Box al Tag NFC restituisco errore
-    if (tagAssociato) {
-      setState(() {
-        testoPulsanteAssociazioneTag = labels.associaTag;
-      });
-      _showErrorDialog(labels.erroreTagAssociato);
-    } else if (nfcID != null) {
-      // Passo al Provider il compito di associare il Tag
-      await Provider.of<Boxes>(context, listen: false).addTag(posizione, nfcID);
-      // Recupero la posizione aggiornata
-      Box posizioneAggiornata =
-          Provider.of<Boxes>(context, listen: false).findById(posizione.id!);
-      // Aggiorno la schermata
-      Navigator.of(context).pushReplacementNamed(
-        PosizioneDetailScreen.routeName,
-        arguments: {
-          'box': posizioneAggiornata,
+      // Se è già associato un Box al Tag NFC restituisco errore
+      if (tagAssociato) {
+        // Risetto il pulsante
+        setState(
+          () {
+            testoPulsanteAssociazioneTag = labels.associaTag;
+          },
+        );
+        // Mostro l'errore se il tag è già associato
+        _showErrorDialog(labels.erroreTagAssociato);
+      } else if (nfcID != null) {
+        // Passo al Provider il compito di associare il Tag
+        await Provider.of<Boxes>(context, listen: false)
+            .addTag(posizione, nfcID);
+        // Recupero la posizione aggiornata
+        Box posizioneAggiornata =
+            Provider.of<Boxes>(context, listen: false).findById(posizione.id!);
+        // Aggiorno la schermata
+        Navigator.of(context).pushReplacementNamed(
+          PosizioneDetailScreen.routeName,
+          arguments: {
+            'box': posizioneAggiornata,
+          },
+        );
+      }
+    } else {
+      // Risetto il pulsante
+      setState(
+        () {
+          testoPulsanteAssociazioneTag = labels.associaTag;
         },
       );
     }
@@ -168,7 +183,7 @@ class _PosizioneDetailScreenState extends State<PosizioneDetailScreen> {
               flex: 8,
               child: Container(
                 width: deviceSize.width * 0.95,
-                height: deviceSize.height * 0.5,
+                height: deviceSize.height * 0.55,
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(

@@ -149,7 +149,6 @@ class Boxes with ChangeNotifier {
           "type": "equipmenttag",
           "attributes": {
             "qrCode": null,
-            "rfid": null,
             "nfcId": nfcID,
           }
         }

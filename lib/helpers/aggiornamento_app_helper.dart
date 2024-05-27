@@ -44,7 +44,7 @@ class AggiornamentoAppHelper {
     );
 
     // Confronto Versioni in formato stringa
-    if (infoVersioneFirebase == infoVersioneApp) {
+    if ((infoVersioneFirebase).replaceAll('+', '.') == infoVersioneApp) {
       return;
     }
 
@@ -83,17 +83,29 @@ class AggiornamentoAppHelper {
       return;
     }
 
-    // Recupero URL per download nuova versione app
-    final downloadUrl = remoteConfig.getString('downloadUrl');
+    // Recupero la radice dell'URL per il download della nuova versione app
+    final downloadUrlRadice = remoteConfig.getString('downloadUrl');
+
+    // Compongo l'URL da cui scaricare la nuova versione dell'app
+    final downloadUrl =
+        '$downloadUrlRadice/${(infoVersioneFirebase).replaceAll('+', '/')}/inGiro.apk';
+
+    logger.d(downloadUrl);
 
     // Definizione URL per richiesta get
     final url = Uri.parse('$downloadUrl');
 
     // Chiamata get per download apk
-    final request = await http.Request(
-      'GET',
-      url,
-    );
+    var request;
+
+    try {
+      request = await http.Request(
+        'GET',
+        url,
+      );
+    } catch (error) {
+      throw error;
+    }
 
     // Definifione Client
     var httpClient = http.Client();
@@ -104,7 +116,7 @@ class AggiornamentoAppHelper {
     // Definisco la directory per i download
     String directoryDownload = (await getApplicationDocumentsDirectory()).path;
     // Definisco la directory per salvare il file
-    File directoryFile = File('$directoryDownload/Timbratore NFC.apk');
+    File directoryFile = File('$directoryDownload/inGiro.apk');
 
     // Definisco le variabili per controllare il download
     List<List<int>> chunks = [];

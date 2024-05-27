@@ -54,7 +54,7 @@ class Boxes with ChangeNotifier {
 
     // Definizione del link della chiamata
     var url = Uri.parse(
-      '$urlAmbiente/api/entities/v1/box?fields=code,description,eqptType,statusCode,equipmentTag&include=equipmentTag&filter[posizione]=TRUE&sort=code',
+      '$urlAmbiente/api/entities/v1/box?fields=code,description,eqptType,statusCode,equipmentTag&include=equipmentTag&filter[posizione]=TRUE&filter[statusCode]=VALIDATE&sort=code',
     );
 
     // Preparazione del try-catch degli errori

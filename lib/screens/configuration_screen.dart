@@ -61,6 +61,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     qrCodeDati = await Navigator.of(context)
                         .pushNamed(QRCodeReaderScreen.routeName);
 
+                    // Recupero dati per test
                     // qrCodeDati = {
                     //   'urlAmbiente': 'https://demo7.in-am.it/gmaoCS02/',
                     //   'username': '',

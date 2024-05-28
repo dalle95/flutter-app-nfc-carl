@@ -17,6 +17,18 @@ class TimbraturaItem extends StatefulWidget {
   State<TimbraturaItem> createState() => _TimbraturaItemState();
 }
 
+IconData definisciIcona(direzione) {
+  if (direzione == labels.entrata) {
+    return Icons.login;
+  }
+
+  if (direzione == labels.uscita) {
+    return Icons.logout;
+  } else {
+    return Icons.open_in_browser_rounded;
+  }
+}
+
 class _TimbraturaItemState extends State<TimbraturaItem> {
   @override
   Widget build(BuildContext context) {
@@ -32,9 +44,7 @@ class _TimbraturaItemState extends State<TimbraturaItem> {
           padding: const EdgeInsets.all(5.0),
           child: ListTile(
             leading: Icon(
-              widget.timbratura!.direzione == labels.entrata
-                  ? Icons.login
-                  : Icons.logout,
+              definisciIcona(widget.timbratura!.direzione),
               color: Theme.of(context).colorScheme.primary,
               size: 40,
             ),

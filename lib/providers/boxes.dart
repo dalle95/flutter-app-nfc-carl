@@ -22,6 +22,7 @@ class Boxes with ChangeNotifier {
 
   // Inizializzo la lista delle Boxes come vuota
   List<Box> boxesLista = [];
+  List<Box> boxesListaPerFiltro = [];
 
   Boxes({
     this.urlAmbiente,
@@ -35,9 +36,47 @@ class Boxes with ChangeNotifier {
     return [...boxesLista];
   }
 
+  // Lista delle Boxes per filtro
+  List<Box> get boxesPerFiltro {
+    return [...boxesListaPerFiltro];
+  }
+
   // Recupera una Box per ID
   Box findById(String id) {
     return boxesLista.firstWhere((element) => element.id == id);
+  }
+
+  // Funzione per filtrare le posizioni
+  void filtraPosizioni(bool bool) {
+    logger.d('Funzione filtraPosizioni');
+
+    logger.d('Booleano: $bool');
+
+    // Inizializzazione lista vuota
+    List<Box> loadedBoxes = [];
+
+    List<Box> listaBoxes = boxesListaPerFiltro;
+
+    if (bool == true) {
+      // Iterazione per ogni risultato
+      for (var posizione in listaBoxes) {
+        // Controllo se la posizione ha un tag associato
+        if (posizione!.tag != null) {
+          loadedBoxes.add(posizione);
+          // // Controllo se l'id del tag non è null
+          // if ((posizione!.tag!.nfcId != null) == bool) {
+          //   // Aggiungo la posizione nella lista
+          //   loadedBoxes.add(posizione);
+          // }
+        }
+      }
+    } else {
+      loadedBoxes = listaBoxes;
+    }
+
+    // Aggiornamento della lista
+    boxesLista = loadedBoxes;
+    notifyListeners();
   }
 
   // Funzione per estrarre le Boxes tramite richiesta get
@@ -76,9 +115,6 @@ class Boxes with ChangeNotifier {
       for (var box in extractedData['data']) {
         // Definisco il BOX nullo
         Tag? tag;
-
-        logger
-            .d('Box ID: ${box['id']}, Box Code: ${box['attributes']['code']}');
 
         if (extractedData['included'] != null) {
           // Recupero del tag associato
@@ -120,6 +156,7 @@ class Boxes with ChangeNotifier {
     } finally {
       // Aggiornamento della lista
       boxesLista = loadedBoxes;
+      boxesListaPerFiltro = loadedBoxes;
       notifyListeners();
     }
   }

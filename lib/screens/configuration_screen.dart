@@ -63,9 +63,11 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
                     // Recupero dati per test
                     // qrCodeDati = {
-                    //   'urlAmbiente': 'https://demo7.in-am.it/gmaoCS02/',
+                    //   'urlAmbiente': 'https://pellegrini.in-am.it/gmaoCS02/',
                     //   'username': '',
                     // };
+
+                    // Controllo se il qrcode è valido
                     if (qrCodeDati != null) {
                       Provider.of<Auth>(
                         context,

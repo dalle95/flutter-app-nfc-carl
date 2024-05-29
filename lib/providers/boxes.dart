@@ -61,13 +61,8 @@ class Boxes with ChangeNotifier {
       // Iterazione per ogni risultato
       for (var posizione in listaBoxes) {
         // Controllo se la posizione ha un tag associato
-        if (posizione!.tag != null) {
+        if (posizione.tag == null) {
           loadedBoxes.add(posizione);
-          // // Controllo se l'id del tag non è null
-          // if ((posizione!.tag!.nfcId != null) == bool) {
-          //   // Aggiungo la posizione nella lista
-          //   loadedBoxes.add(posizione);
-          // }
         }
       }
     } else {

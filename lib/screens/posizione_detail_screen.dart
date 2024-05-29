@@ -46,7 +46,7 @@ class _PosizioneDetailScreenState extends State<PosizioneDetailScreen> {
     );
   }
 
-  // Widget per la visualizzazione dei dati della timbratura
+  // Widget per la visualizzazione dei dati della posizione
   Widget buildVisualizzazioneDati({
     String titolo = '',
     Color titoloColor = Colors.black,

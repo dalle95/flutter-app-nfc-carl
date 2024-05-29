@@ -263,6 +263,8 @@ class Boxes with ChangeNotifier {
 
       // Aggiorno il BOX nella lista
       boxesLista[boxIndex] = boxAggiornato;
+      // Aggiorno il BOX nella lista per il filtro
+      boxesListaPerFiltro[boxIndex] = boxAggiornato;
 
       notifyListeners();
     } catch (error) {
@@ -351,6 +353,8 @@ class Boxes with ChangeNotifier {
 
       // Aggiorno il BOX nella lista
       boxesLista[boxIndex] = boxAggiornato;
+      // Aggiorno il BOX nella lista per il filtro
+      boxesListaPerFiltro[boxIndex] = boxAggiornato;
 
       notifyListeners();
     } catch (error) {

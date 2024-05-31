@@ -47,17 +47,17 @@ class Boxes with ChangeNotifier {
   }
 
   // Funzione per filtrare le posizioni
-  void filtraPosizioni(bool bool) {
+  void filtraPosizioni(bool daFiltrare) {
     logger.d('Funzione filtraPosizioni');
 
-    logger.d('Booleano: $bool');
+    logger.d('daFiltrare: $daFiltrare');
 
     // Inizializzazione lista vuota
     List<Box> loadedBoxes = [];
 
     List<Box> listaBoxes = boxesListaPerFiltro;
 
-    if (bool == true) {
+    if (daFiltrare == true) {
       // Iterazione per ogni risultato
       for (var posizione in listaBoxes) {
         // Controllo se la posizione ha un tag associato
@@ -66,7 +66,10 @@ class Boxes with ChangeNotifier {
         }
       }
     } else {
-      loadedBoxes = listaBoxes;
+      // Iterazione per ogni risultato
+      for (var posizione in listaBoxes) {
+        loadedBoxes.add(posizione);
+      }
     }
 
     // Aggiornamento della lista
@@ -263,8 +266,11 @@ class Boxes with ChangeNotifier {
 
       // Aggiorno il BOX nella lista
       boxesLista[boxIndex] = boxAggiornato;
-      // Aggiorno il BOX nella lista per il filtro
-      boxesListaPerFiltro[boxIndex] = boxAggiornato;
+
+      // Aggiorno il BOX nella lista filtrata
+      final index = boxesListaPerFiltro
+          .indexWhere((elemento) => elemento.id == boxAggiornato.id);
+      boxesListaPerFiltro[index] = boxAggiornato;
 
       notifyListeners();
     } catch (error) {
@@ -353,8 +359,8 @@ class Boxes with ChangeNotifier {
 
       // Aggiorno il BOX nella lista
       boxesLista[boxIndex] = boxAggiornato;
-      // Aggiorno il BOX nella lista per il filtro
-      boxesListaPerFiltro[boxIndex] = boxAggiornato;
+      // Aggiorno il BOX nella lista filtrata
+      boxesListaPerFiltro = boxesLista;
 
       notifyListeners();
     } catch (error) {

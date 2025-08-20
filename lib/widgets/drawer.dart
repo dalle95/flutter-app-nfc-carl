@@ -1,5 +1,5 @@
+import 'package:app_carl_timbratura_nfc/helpers/assets_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -101,7 +101,7 @@ class _MainDrawerState extends State<MainDrawer> {
               },
               child: Text(labels.conferma),
               style: TextButton.styleFrom(
-                backgroundColor: Theme.of(ctx).colorScheme.background,
+                backgroundColor: Theme.of(ctx).colorScheme.surface,
               ),
             ),
             TextButton(
@@ -110,7 +110,7 @@ class _MainDrawerState extends State<MainDrawer> {
               },
               child: Text(labels.annulla),
               style: TextButton.styleFrom(
-                backgroundColor: Theme.of(ctx).colorScheme.background,
+                backgroundColor: Theme.of(ctx).colorScheme.surface,
               ),
             ),
           ],
@@ -137,8 +137,7 @@ class _MainDrawerState extends State<MainDrawer> {
               height: 70,
               child: FittedBox(
                 fit: BoxFit.cover,
-                child:
-                    Image.asset('assets/images/Logo_Injenia_Maggioli_IT.png'),
+                child: Image.asset(AssetsHelper.logoCompany),
               ),
             ),
           ),

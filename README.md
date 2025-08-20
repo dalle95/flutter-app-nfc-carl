@@ -15,9 +15,6 @@ InGiro si mantiene sempre aggiornata grazie alla funzionalità di aggiornamento 
 
 ## Caratteristiche Funzionali
 
-### Configurazione Ambientale con QR Code
-Grazie alla fotocamera integrata, l'utente può configurare rapidamente l'applicazione scansionando il QR Code di configurazione relativo all'ambiente desiderato.
-
 ### Login Semplificato
 L'accesso all'app è reso semplice utilizzando le credenziali dell'utenza di CARL Software. Una volta effettuato il login, InGiro gestisce automaticamente le operazioni in background per garantire un'esperienza senza interruzioni.
 

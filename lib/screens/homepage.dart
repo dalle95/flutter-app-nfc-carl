@@ -1,3 +1,4 @@
+import 'package:app_carl_timbratura_nfc/helpers/assets_helper.dart';
 import 'package:flutter/material.dart';
 
 import '/helpers/aggiornamento_app_helper.dart';
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           height: 40,
           child: FittedBox(
             fit: BoxFit.cover,
-            child: Image.asset('assets/images/injenia_logo_color 4.png'),
+            child: Image.asset(AssetsHelper.logo),
           ),
         ),
       ),

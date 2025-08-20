@@ -1,3 +1,4 @@
+import 'package:app_carl_timbratura_nfc/helpers/assets_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,7 @@ class _AuthFormState extends State<AuthForm> {
             },
             child: Text(labels.conferma),
             style: TextButton.styleFrom(
-              backgroundColor: Theme.of(ctx).colorScheme.background,
+              backgroundColor: Theme.of(ctx).colorScheme.surface,
             ),
           )
         ],
@@ -109,7 +110,7 @@ class _AuthFormState extends State<AuthForm> {
     final deviceSize = MediaQuery.of(context).size;
 
     return Card(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -130,8 +131,7 @@ class _AuthFormState extends State<AuthForm> {
                     height: 50,
                     child: FittedBox(
                       fit: BoxFit.cover,
-                      child:
-                          Image.asset('assets/images/injenia_logo_color 4.png'),
+                      child: Image.asset(AssetsHelper.logo),
                     ),
                   ),
                   const SizedBox(height: 10),

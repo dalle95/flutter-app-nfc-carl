@@ -42,7 +42,6 @@ class _QRCodeReaderScreenState extends State<QRCodeReaderScreen> {
           facing: CameraFacing.back,
           torchEnabled: false,
         ),
-        // fit: BoxFit.contain,
         onDetect: (capture) {
           final List<Barcode> barcodes = capture.barcodes;
           for (final barcode in barcodes) {
